@@ -139,10 +139,3 @@ fig = res.plot()
 
     
 ![png](/2022-06-06-Time-Series-Analysis-Pt2_files/2022-06-06-Time-Series-Analysis-Pt2_11_0.png)
-    
-
-
-
-```python
-
-```

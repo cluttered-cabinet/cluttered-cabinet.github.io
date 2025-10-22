@@ -154,8 +154,3 @@ $$
 Where $k$ is the integer result of $(h-1)/m$
 
 Now I've got to get going, but my post tomorrow will keep going down this road.
-
-
-```python
-
-```

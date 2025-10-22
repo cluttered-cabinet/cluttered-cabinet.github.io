@@ -37,10 +37,3 @@ plt.scatter(x[:,0], x[:,1], c = y)
 
     
 ![png](/2022-06-21-Vanilla-NN_files/2022-06-21-Vanilla-NN_3_1.png)
-    
-
-
-
-```python
-
-```

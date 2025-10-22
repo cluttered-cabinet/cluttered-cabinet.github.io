@@ -4,6 +4,8 @@ description: What the heck is logistic regression and how do you implement it?
 date: "2022-06-02"
 tags: [jupyter, python, sklearn, logistic_regression]
 ---
+# What the heck is logistic regression and how do you implement it?
+
 The simple answer is the logistic regression is a way to classify a binary target. So if you have a bunch of features in order to tell you if you're looking at a dog or a cat, you could in theory train a logistic regression algorithm on said features to tell you the next time you see an animal if the animal is a dog or a cat. 
 
 The slightly more in depth answer is that the logistic equation is defined like so: 
@@ -88,22 +90,25 @@ Now on to the part that most of you are here for: building a logistic model usin
 
 
 ```python
-# | code-fold: true
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
-
 ```
 
 One last time, let's take a look at our data, but in a different way this time. Lets look at it in 3D, so we can see the literal sigmoidal nature of our model: 
 
 
 ```python
-# | code-fold: true
 fig = plt.figure(figsize=(14, 7))
 ax = plt.axes(projection="3d")
 ax.plot_surface(
-    x_sample, y_sample, target_sample, cmap="coolwarm", rcount=200, ccount=200
+    x_sample, 
+    y_sample, 
+    target_sample, 
+    cmap="coolwarm", 
+    rcount=200, 
+    ccount=200
 )
+
 ax.set_xlabel(r"$x_1$")
 ax.set_ylabel(r"$x_2$")
 ax.zaxis.set_rotate_label(False)
@@ -111,7 +116,6 @@ ax.set_zlabel(r"$f(x_{0},x_{1})$", rotation=0)
 ax.view_init(15, 70)
 plt.title("Training Data")
 plt.show()
-
 ```
 
 
@@ -127,11 +131,12 @@ Next step that we want to put our data in a nice dataframe and use `LogisticRegr
 
 ```python
 df = pd.DataFrame(
-    {"x1": x_sample.ravel(), "x2": y_sample.ravel(), "target": target_sample.ravel()}
+    {"x1": x_sample.ravel(), 
+    "x2": y_sample.ravel(), 
+    "target": target_sample.ravel()}
 )
 
 df.head()
-
 ```
 
 
@@ -239,8 +244,3 @@ plt.show()
 
 
 That looks extremely similiar to the idea we had when we created the data. So on that note, I'm going to leave the basics of logistic regression here. Next up we can take a closer look at prediction and accuracy of the model.
-
-
-```python
-
-```

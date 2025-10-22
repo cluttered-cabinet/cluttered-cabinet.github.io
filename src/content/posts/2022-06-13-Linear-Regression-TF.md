@@ -298,8 +298,3 @@ for epoch in range(num_epochs):
 ```
 
 This is an abrupt stop, because I've got yet another thing I'd like to obsess about. Coming soon!
-
-
-```python
-
-```

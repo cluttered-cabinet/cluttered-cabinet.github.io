@@ -58,6 +58,35 @@ const formattedDate = post.data.date;
   </article>
 </Layout>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const codeBlocks = document.querySelectorAll('.prose pre');
+    
+    codeBlocks.forEach((pre) => {
+      // Create wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+      pre.parentNode?.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+      
+      // Create toggle button
+      const button = document.createElement('button');
+      button.className = 'code-toggle';
+      button.innerHTML = '▼ code';
+      button.setAttribute('aria-expanded', 'true');
+      
+      wrapper.insertBefore(button, pre);
+      
+      // Toggle functionality
+      button.addEventListener('click', () => {
+        const isCollapsed = pre.classList.toggle('collapsed');
+        button.setAttribute('aria-expanded', (!isCollapsed).toString());
+        button.innerHTML = isCollapsed ? '▶ code' : '▼ code';
+      });
+    });
+  });
+</script>
+
 <style>
   .prose {
     @apply text-text-primary;
@@ -109,5 +138,24 @@ const formattedDate = post.data.date;
 
   .prose :global(blockquote) {
     @apply border-l-2 border-accent pl-4 py-1 text-text-secondary italic my-4 text-sm;
+  }
+
+  /* Code folding styles */
+  :global(.code-block-wrapper) {
+    @apply mb-4 relative;
+  }
+
+  :global(.code-toggle) {
+    @apply w-full text-left px-3 py-1.5 text-xs font-mono text-text-secondary 
+           bg-surface border border-border rounded-t hover:text-accent 
+           transition-colors cursor-pointer;
+  }
+
+  :global(.code-toggle + pre) {
+    @apply rounded-t-none mt-0 transition-all duration-300;
+  }
+
+  :global(pre.collapsed) {
+    @apply max-h-0 overflow-hidden !p-0 !border-0 !mb-0;
   }
 </style>

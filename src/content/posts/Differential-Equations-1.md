@@ -112,8 +112,3 @@ plt.show()
 
 
 Now I realize, this was extremely exciting and you just can't wait for more. Don't worry, next time we'll implement an SIR model. And maybe mess with the populations a bit.
-
-
-```python
-
-```
