@@ -1,16 +1,9 @@
 ---
 title: "Agents"
 date: "2025-01-01"
-summary: ""
+summary: "Working with agents and building tools for LLMs."
 description: "Working with agents."
-toc: false
-readTime: false
-autonumber: true
-math: true
 tags: ["llms", "agents"]
-showTags: false
-hideBackToTop: false
-breadcrumbs: false
 ---
 - Get agent to run docker container, access it, then run a random forest model on some data.
 - Listened to a podcast once that said the biggest issue with a lot of agentic work is the lack of tools which have good interfaces for LLMs. So I should create good tools.
@@ -99,3 +92,4 @@ If I were blind (and trained on a bunch of data), I'd probably want an interface
 ```
 
 Fine, so I have a silly little function which will handle parsing the file system.
+

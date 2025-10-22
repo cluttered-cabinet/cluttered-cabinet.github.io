@@ -24,7 +24,7 @@ const staggerContainer = {
 export default function Hero() {
   return (
     <section className="relative h-[40vh] flex flex-col justify-center px-6 md:px-12">
-      <div className="absolute inset-0 bg-radial-glow pointer-events-none opacity-60" />
+      <div className="absolute inset-0 bg-radial-glow pointer-events-none opacity-60 transition-opacity duration-300" />
 
       <motion.div
         initial="hidden"

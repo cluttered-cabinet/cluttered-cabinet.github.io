@@ -1,7 +1,10 @@
 ---
+import ThemeCustomizer from './ThemeCustomizer';
+
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
+  { name: 'home', href: '/' },
   { name: 'projects', href: '/projects' },
   { name: 'posts', href: '/posts' },
   { name: 'about', href: '/about' },
@@ -9,11 +12,7 @@ const navLinks = [
 ---
 
 <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-200 border-b border-transparent">
-  <div class="max-w-6xl mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
-    <a href="/" class="font-mono text-sm text-text-primary hover:text-accent transition-colors font-bold">
-      cluttered_cabinet
-    </a>
-
+  <div class="max-w-6xl mx-auto px-6 md:px-12 py-4 flex justify-end items-center gap-4">
     <nav class="flex gap-6">
       {navLinks.map(link => (
         <a
@@ -26,14 +25,15 @@ const navLinks = [
         </a>
       ))}
     </nav>
+    <ThemeCustomizer client:load />
   </div>
 </header>
 
 <style>
   #header.scrolled {
-    background-color: rgba(10, 10, 12, 0.95);
+    background-color: color-mix(in srgb, var(--bg) 95%, transparent);
     backdrop-filter: blur(8px);
-    border-bottom-color: #1F1F23;
+    border-bottom-color: var(--border);
   }
 </style>
 

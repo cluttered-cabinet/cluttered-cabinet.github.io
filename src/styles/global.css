@@ -5,20 +5,51 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Default dark theme */
+    --bg: #0A0A0C;
+    --surface: #141418;
+    --border: #1F1F23;
+    --text-primary: #E5E7EB;
+    --text-secondary: #9CA3AF;
+    --accent-color: #3DF5E0;
+    --accent-glow: rgba(61, 245, 224, 0.4);
+    --radial-glow: rgba(120, 70, 255, 0.15);
+  }
+
+  [data-theme="light"] {
+    --bg: #F8F9FA;
+    --surface: #FFFFFF;
+    --border: #E5E7EB;
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    --accent-color: #3DF5E0;
+    --accent-glow: rgba(61, 245, 224, 0.3);
+    --radial-glow: rgba(120, 70, 255, 0.08);
+  }
+
   * {
     @apply antialiased;
   }
 
   body {
-    @apply bg-bg text-text-primary font-mono;
-    background-image: url('/noise.png'), radial-gradient(circle at 30% 10%, rgba(120, 70, 255, 0.15), transparent 60%);
+    background-color: var(--bg);
+    color: var(--text-primary);
+    @apply font-mono;
+    background-image: url('/noise.png'), radial-gradient(circle at 30% 10%, var(--radial-glow), transparent 60%);
     background-attachment: fixed;
     background-size: 200px 200px, 100%;
     line-height: 1.6;
     letter-spacing: -0.01em;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-mono font-bold;
     letter-spacing: -0.03em;
   }
@@ -32,10 +63,11 @@
   }
 
   a {
-    @apply text-accent transition-all duration-300;
+    color: var(--accent-color);
+    @apply transition-all duration-300;
   }
 
   a:hover {
-    text-shadow: 0 0 12px rgba(61, 245, 224, 0.8), 0 0 24px rgba(61, 245, 224, 0.4);
+    text-shadow: 0 0 12px var(--accent-glow), 0 0 24px var(--accent-glow);
   }
 }

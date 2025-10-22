@@ -4,15 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: '#0A0A0C',
-        surface: '#141418',
-        accent: '#3DF5E0',
-        'accent-bright': '#00FFF0',
-        violet: 'rgba(120, 70, 255, 0.1)',
-        border: '#1F1F23',
+        bg: 'var(--bg)',
+        surface: 'var(--surface)',
+        accent: 'var(--accent-color)',
+        'accent-bright': 'var(--accent-color)',
+        border: 'var(--border)',
         text: {
-          primary: '#E5E7EB',
-          secondary: '#9CA3AF',
+          primary: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
         }
       },
       fontFamily: {
@@ -21,7 +20,7 @@ export default {
       },
       backgroundImage: {
         'noise': "url('/noise.png')",
-        'radial-glow': "radial-gradient(circle at 50% 20%, rgba(120, 70, 255, 0.1), transparent 70%)"
+        'radial-glow': "radial-gradient(circle at 50% 20%, var(--radial-glow), transparent 70%)"
       }
     }
   },
