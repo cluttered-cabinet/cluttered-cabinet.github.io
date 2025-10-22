@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// Use simple date format
+const formattedDate = post.data.date;
+---
+
+<Layout title={`${post.data.title} — Cluttered Cabinet`} description={post.data.description || post.data.summary}>
+  <article class="max-w-3xl mx-auto px-6 md:px-12 pt-24 pb-16">
+    <!-- Post Header -->
+    <header class="mb-8 border-b border-border pb-6">
+      <time class="text-xs text-text-secondary block mb-3 font-mono">{formattedDate}</time>
+
+      <h1 class="font-mono text-3xl text-text-primary mb-4 font-bold tracking-tight">
+        {post.data.title}
+      </h1>
+
+      {post.data.summary && (
+        <p class="text-sm text-text-secondary leading-relaxed font-mono">
+          {post.data.summary}
+        </p>
+      )}
+
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-4">
+          {post.data.tags.map((tag: string) => (
+            <span class="text-xs px-2 py-0.5 bg-surface text-text-secondary rounded border border-border font-mono">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <!-- Post Content -->
+    <div class="prose prose-invert max-w-none">
+      <Content />
+    </div>
+
+    <!-- Back Link -->
+    <div class="mt-12 pt-6 border-t border-border">
+      <a href="/posts" class="text-accent hover:text-accent-bright text-sm font-mono">
+        ← back
+      </a>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .prose {
+    @apply text-text-primary;
+  }
+
+  .prose :global(h1) {
+    @apply text-2xl font-mono font-bold text-text-primary mt-8 mb-4 tracking-tight;
+  }
+
+  .prose :global(h2) {
+    @apply text-xl font-mono font-bold text-text-primary mt-6 mb-3 tracking-tight;
+  }
+
+  .prose :global(h3) {
+    @apply text-lg font-mono font-bold text-text-primary mt-5 mb-2 tracking-tight;
+  }
+
+  .prose :global(p) {
+    @apply text-text-primary mb-4 leading-relaxed text-sm font-mono;
+  }
+
+  .prose :global(a) {
+    @apply text-accent no-underline hover:text-accent-bright;
+  }
+
+  .prose :global(strong) {
+    @apply text-text-primary font-bold;
+  }
+
+  .prose :global(code) {
+    @apply bg-surface px-1.5 py-0.5 rounded text-accent text-xs font-mono;
+  }
+
+  .prose :global(pre) {
+    @apply bg-surface p-3 rounded overflow-x-auto mb-4 border border-border text-xs;
+  }
+
+  .prose :global(pre code) {
+    @apply bg-transparent p-0 text-text-primary;
+  }
+
+  .prose :global(ul), .prose :global(ol) {
+    @apply mb-4 ml-6 text-sm font-mono;
+  }
+
+  .prose :global(li) {
+    @apply mb-2 text-text-primary;
+  }
+
+  .prose :global(blockquote) {
+    @apply border-l-2 border-accent pl-4 py-1 text-text-secondary italic my-4 text-sm;
+  }
+</style>

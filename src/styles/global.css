@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-bg text-text-primary font-mono;
+    background-image: url('/noise.png'), radial-gradient(circle at 30% 10%, rgba(120, 70, 255, 0.15), transparent 60%);
+    background-attachment: fixed;
+    background-size: 200px 200px, 100%;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-mono font-bold;
+    letter-spacing: -0.03em;
+  }
+
+  h1 {
+    @apply text-5xl;
+  }
+
+  h2 {
+    @apply text-xl;
+  }
+
+  a {
+    @apply text-accent transition-all duration-300;
+  }
+
+  a:hover {
+    text-shadow: 0 0 12px rgba(61, 245, 224, 0.8), 0 0 24px rgba(61, 245, 224, 0.4);
+  }
+}

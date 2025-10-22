@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About — Cluttered Cabinet">
+  <section class="max-w-4xl mx-auto px-6 md:px-12 pt-24 pb-16">
+    <div class="mb-8">
+      <h1 class="font-mono text-3xl text-text-primary mb-2 font-bold tracking-tight">about</h1>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Image Placeholder -->
+      <div class="md:col-span-1">
+        <div class="aspect-square bg-surface border border-border rounded flex items-center justify-center">
+          <span class="text-text-secondary text-xs font-mono">img</span>
+        </div>
+      </div>
+
+      <!-- Bio Content -->
+      <div class="md:col-span-3 space-y-4">
+        <div class="prose prose-invert max-w-none">
+          <p class="text-text-primary text-sm leading-relaxed font-mono">
+            hi, i'm <span class="text-accent font-bold">darpan ganatra</span>.
+          </p>
+
+          <p class="text-text-primary text-sm leading-relaxed font-mono">
+            i explore the intersections of machine learning, systems design, and representation learning.
+            this site is my digital laboratory—a place where i document experiments, research notes,
+            and explorations in ai and computation.
+          </p>
+
+          <p class="text-text-primary text-sm leading-relaxed font-mono">
+            my work focuses on understanding how neural networks learn representations, building
+            scalable ml infrastructure, and making complex systems more interpretable.
+          </p>
+
+          <p class="text-text-secondary text-xs leading-relaxed font-mono italic mt-6">
+            [placeholder content. replace with actual bio]
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div class="flex gap-4 pt-4 border-t border-border">
+          <a href="#" class="text-accent hover:text-accent-bright transition-colors text-sm font-mono">
+            github
+          </a>
+          <a href="#" class="text-accent hover:text-accent-bright transition-colors text-sm font-mono">
+            twitter
+          </a>
+          <a href="#" class="text-accent hover:text-accent-bright transition-colors text-sm font-mono">
+            linkedin
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .prose p {
+    @apply mb-4;
+  }
+</style>

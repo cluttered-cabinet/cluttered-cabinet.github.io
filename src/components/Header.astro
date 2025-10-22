@@ -1,0 +1,50 @@
+---
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { name: 'projects', href: '/projects' },
+  { name: 'posts', href: '/posts' },
+  { name: 'about', href: '/about' },
+];
+---
+
+<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-200 border-b border-transparent">
+  <div class="max-w-6xl mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
+    <a href="/" class="font-mono text-sm text-text-primary hover:text-accent transition-colors font-bold">
+      cluttered_cabinet
+    </a>
+
+    <nav class="flex gap-6">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class={`relative font-mono text-sm text-text-secondary hover:text-accent transition-all duration-200 ${
+            currentPath.startsWith(link.href) ? 'text-accent' : ''
+          }`}
+        >
+          {link.name}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  #header.scrolled {
+    background-color: rgba(10, 10, 12, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom-color: #1F1F23;
+  }
+</style>
+
+<script>
+  const header = document.getElementById('header');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  });
+</script>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Llms on Cluttered Cabinet</title>
+    <link>http://localhost:1313/tags/llms/</link>
+    <description>Recent content in Llms on Cluttered Cabinet</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 01 Jan 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/llms/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Agents</title>
+      <link>http://localhost:1313/posts/agents_n_stuff/</link>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/agents_n_stuff/</guid>
+      <description>Get agent to run docker container, access it, then run a random forest model on some data. Listened to a podcast once that said the biggest issue with a lot of agentic work is the lack of tools which have good interfaces for LLMs. So I should create good tools. Note: This is for my mac. It may work on Linux. Definitely (likely &amp;ndash; maybe) wont work on Windows. I don&amp;rsquo;t plan to do anything with this code.</description>
+    </item>
+  </channel>
+</rss>
