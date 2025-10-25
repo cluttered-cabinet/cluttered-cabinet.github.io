@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Cluttered Cabinet 2.0** is a personal blog/portfolio site built with **Astro**, a modern static site generator. The site features a dark sci-lab aesthetic inspired by Prime Intellect and Kyutai.org, with a focus on minimalism, subtle animations, and scientific elegance.
+**Cluttered Cabinet 2.0** is a personal research notebook/blog built with **Astro**, a modern static site generator. The site features a minimal, academic notebook aesthetic with light/dark themes, focusing on readability, clean typography, and content-first design.
 
 **Tech Stack:**
 - **Astro** - Static site generator with content collections
@@ -72,26 +72,35 @@ Runs TypeScript type checking on the entire project, including Astro files.
 
 ## Design System
 
-### Colors
-- **Background**: `#0A0A0C` (matte black)
-- **Surface**: `#141418` (secondary background)
-- **Accent**: `#3DF5E0` (cyan glow)
-- **Violet Ambient**: `rgba(120, 70, 255, 0.1)` (radial gradient)
-- **Text Primary**: `#E5E7EB`
-- **Text Secondary**: `#9CA3AF`
-- **Border**: `#1F1F23`
+### Colors (Dark Theme - Default)
+- **Background**: `#0F0F0F` (near black)
+- **Surface**: `#1A1A1A` (card backgrounds)
+- **Accent**: `#60A5FA` (blue accent)
+- **Text Primary**: `#E8E8E8`
+- **Text Secondary**: `#A0A0A0`
+- **Border**: `#2A2A2A`
+
+### Colors (Light Theme)
+- **Background**: `#FFFFFF` (white)
+- **Surface**: `#F9F9F9` (subtle gray)
+- **Accent**: `#2563EB` (darker blue)
+- **Text Primary**: `#1A1A1A`
+- **Text Secondary**: `#666666`
+- **Border**: `#E0E0E0`
 
 ### Typography
-- **Display Font**: Space Grotesk (headings)
-- **Body Font**: Inter (body text)
-- **Scale**: h1 (3.5rem), h2 (2rem), body (1rem)
+- **Font**: IBM Plex Mono (monospace throughout)
+- **Line Height**: 1.7 (comfortable reading)
+- **Scale**: Modest sizing focused on readability
 
 ### Key Features
-- Noise texture overlay on background
-- Radial violet gradient behind hero section
-- Cyan glow effects on hover states
-- Framer Motion animations (fade-in, slide-up)
-- Responsive design (mobile-first)
+- Light/dark theme toggle (top right)
+- Subtle noise texture on background
+- Table-like post listings with entry numbers
+- Minimal hover effects (opacity-based)
+- Simple fade-in animations
+- Responsive, mobile-first design
+- Collapsible code blocks in posts
 
 ## Writing Blog Posts
 
@@ -119,6 +128,35 @@ draft: false
 - `tags` (optional) - Array of tags
 - `toc` (optional) - Enable table of contents
 - `draft` (optional) - Hide from production builds
+
+## Adding Jupyter Notebooks
+
+To add a Jupyter notebook as a post, convert it to markdown first:
+
+### Quick Method
+```bash
+# Install nbconvert if needed
+pip install nbconvert
+
+# Convert notebook to markdown
+jupyter nbconvert --to markdown your-notebook.ipynb --output-dir=src/content/posts
+
+# Add frontmatter to the generated markdown file (see above)
+```
+
+### Using the Conversion Script
+```bash
+python scripts/convert-notebook.py path/to/your-notebook.ipynb
+```
+
+This will:
+- Convert the notebook to markdown
+- Add a frontmatter template
+- Place it in `src/content/posts/`
+
+Then edit the generated file to update the frontmatter (title, summary, tags, etc.).
+
+See `scripts/convert-notebook.md` for more details.
 
 ## Deployment
 

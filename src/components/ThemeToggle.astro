@@ -13,7 +13,7 @@
 <script>
   const theme = (() => {
     if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-      return localStorage.getItem('theme');
+      return localStorage.getItem('theme') as string;
     }
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
       return 'light';
@@ -27,7 +27,9 @@
     document.documentElement.removeAttribute('data-theme');
   }
 
-  window.localStorage.setItem('theme', theme);
+  if (theme) {
+    window.localStorage.setItem('theme', theme);
+  }
 
   const handleToggleClick = () => {
     const element = document.documentElement;

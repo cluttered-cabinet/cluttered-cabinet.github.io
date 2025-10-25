@@ -38,11 +38,11 @@ const formattedDate = date;
         )}
 
         {tags && tags.length > 0 && (
-          <div class="flex flex-wrap gap-2" onclick="event.stopPropagation();">
+          <div class="flex flex-wrap gap-2 tag-links">
             {tags.map(tag => (
               <a
                 href={`/tags/${tag}`}
-                class="text-xs text-text-secondary hover:text-accent font-mono transition-colors no-underline"
+                class="text-xs text-text-secondary hover:text-accent font-mono transition-colors no-underline tag-link"
               >
                 {tag}
               </a>
@@ -53,6 +53,17 @@ const formattedDate = date;
     </div>
   </a>
 </article>
+
+<script>
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('tag-link')) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = (target as HTMLAnchorElement).href;
+    }
+  });
+</script>
 
 <style>
   .post-card a:hover {
