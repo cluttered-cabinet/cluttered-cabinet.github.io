@@ -1,0 +1,63 @@
+---
+---
+
+<button
+  id="theme-toggle"
+  aria-label="Toggle theme"
+  class="p-2 text-text-secondary hover:text-accent transition-colors font-mono text-sm border border-border rounded bg-surface"
+>
+  <span id="theme-toggle-dark-icon" class="hidden">◐</span>
+  <span id="theme-toggle-light-icon" class="hidden">◑</span>
+</button>
+
+<script>
+  const theme = (() => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      return 'light';
+    }
+    return 'dark';
+  })();
+
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+
+  window.localStorage.setItem('theme', theme);
+
+  const handleToggleClick = () => {
+    const element = document.documentElement;
+    const currentTheme = element.getAttribute('data-theme');
+
+    if (currentTheme === 'light') {
+      element.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      element.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+
+    updateIcon();
+  };
+
+  const updateIcon = () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    if (currentTheme === 'light') {
+      darkIcon?.classList.remove('hidden');
+      lightIcon?.classList.add('hidden');
+    } else {
+      darkIcon?.classList.add('hidden');
+      lightIcon?.classList.remove('hidden');
+    }
+  };
+
+  document.getElementById('theme-toggle')?.addEventListener('click', handleToggleClick);
+  updateIcon();
+</script>

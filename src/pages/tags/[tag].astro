@@ -1,0 +1,67 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts');
+  const publishedPosts = allPosts.filter(post => !post.data.draft);
+
+  // Get unique tags
+  const uniqueTags = new Set<string>();
+  publishedPosts.forEach(post => {
+    post.data.tags?.forEach(tag => uniqueTags.add(tag));
+  });
+
+  // Create a path for each tag
+  return Array.from(uniqueTags).map(tag => {
+    const filteredPosts = publishedPosts
+      .filter(post => post.data.tags?.includes(tag))
+      .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+    return {
+      params: { tag },
+      props: { posts: filteredPosts, tag },
+    };
+  });
+}
+
+const { posts, tag } = Astro.props;
+---
+
+<Layout title={`Tag: ${tag} — Cluttered Cabinet`}>
+  <section class="max-w-4xl mx-auto px-6 md:px-12 pt-24 pb-16">
+    <div class="mb-8 pb-6 border-b border-border">
+      <div class="mb-3">
+        <a href="/tags" class="text-accent hover:opacity-80 text-xs font-mono transition-opacity">
+          ← all tags
+        </a>
+      </div>
+      <h1 class="font-mono text-2xl text-text-primary mb-2 tracking-tight">
+        tag: {tag}
+      </h1>
+      <p class="text-text-secondary text-xs font-mono">
+        {posts.length} {posts.length === 1 ? 'entry' : 'entries'}
+      </p>
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="space-y-0">
+        {posts.map((post, index) => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            summary={post.data.summary}
+            slug={post.slug}
+            tags={post.data.tags}
+            index={posts.length - index}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="py-16">
+        <p class="text-text-secondary text-sm font-mono">no entries found</p>
+      </div>
+    )}
+  </section>
+</Layout>

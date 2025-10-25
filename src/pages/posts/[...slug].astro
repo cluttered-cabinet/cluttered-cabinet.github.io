@@ -36,9 +36,12 @@ const formattedDate = post.data.date;
       {post.data.tags && post.data.tags.length > 0 && (
         <div class="flex flex-wrap gap-2 mt-4">
           {post.data.tags.map((tag: string) => (
-            <span class="text-xs px-2 py-0.5 bg-surface text-text-secondary rounded border border-border font-mono">
+            <a
+              href={`/tags/${tag}`}
+              class="text-xs px-2 py-0.5 bg-surface text-text-secondary hover:text-accent hover:border-accent rounded border border-border font-mono transition-colors no-underline"
+            >
               {tag}
-            </span>
+            </a>
           ))}
         </div>
       )}

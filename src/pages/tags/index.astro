@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all posts and extract unique tags with counts
+const allPosts = await getCollection('posts');
+const publishedPosts = allPosts.filter(post => !post.data.draft);
+
+const tagCounts = new Map<string, number>();
+publishedPosts.forEach(post => {
+  post.data.tags?.forEach(tag => {
+    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+  });
+});
+
+// Sort tags alphabetically
+const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+---
+
+<Layout title="Tags — Cluttered Cabinet">
+  <section class="max-w-4xl mx-auto px-6 md:px-12 pt-24 pb-16">
+    <div class="mb-8 pb-6 border-b border-border">
+      <h1 class="font-mono text-2xl text-text-primary mb-2 tracking-tight">tags</h1>
+      <p class="text-text-secondary text-xs font-mono">
+        {sortedTags.length} total
+      </p>
+    </div>
+
+    {sortedTags.length > 0 ? (
+      <div class="space-y-0">
+        {sortedTags.map(([tag, count]) => (
+          <a
+            href={`/tags/${tag}`}
+            class="block py-3 border-b border-border hover:bg-surface/30 transition-all duration-150 no-underline"
+          >
+            <div class="flex items-baseline justify-between">
+              <span class="font-mono text-base text-text-primary hover:text-accent transition-colors">
+                {tag}
+              </span>
+              <span class="font-mono text-xs text-text-secondary">
+                {count} {count === 1 ? 'entry' : 'entries'}
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="py-16">
+        <p class="text-text-secondary text-sm font-mono">no tags yet</p>
+      </div>
+    )}
+  </section>
+</Layout>

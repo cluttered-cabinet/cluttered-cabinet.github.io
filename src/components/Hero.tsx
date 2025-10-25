@@ -2,56 +2,29 @@ import { motion } from 'framer-motion';
 
 const fadeIn = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.6 } }
-};
-
-const slideIn = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2
-    }
-  }
+  visible: { opacity: 1, transition: { duration: 0.4 } }
 };
 
 export default function Hero() {
   return (
-    <section className="relative h-[40vh] flex flex-col justify-center px-6 md:px-12">
-      <div className="absolute inset-0 bg-radial-glow pointer-events-none opacity-60 transition-opacity duration-300" />
-
+    <section className="relative py-16 px-6 md:px-12 border-b border-border">
       <motion.div
         initial="hidden"
         animate="visible"
-        variants={staggerContainer}
-        className="relative z-10 max-w-5xl"
+        variants={fadeIn}
+        className="max-w-5xl"
       >
-        <motion.h1
-          variants={slideIn}
-          className="font-mono text-4xl md:text-5xl text-text-primary mb-3 tracking-tight font-bold"
-        >
+        <h1 className="font-mono text-3xl md:text-4xl text-text-primary mb-2 tracking-tight">
           cluttered_cabinet
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          variants={fadeIn}
-          className="text-text-secondary text-sm mb-2 font-mono"
-        >
-          /darpan_ganatra
-        </motion.p>
+        <p className="text-text-secondary text-sm font-mono mb-1">
+          darpan ganatra
+        </p>
 
-        <motion.p
-          variants={fadeIn}
-          className="text-text-secondary text-sm max-w-xl font-mono"
-        >
-          → experiments in representation, learning, and systems
-        </motion.p>
+        <p className="text-text-secondary text-sm max-w-2xl font-mono">
+          experiments in representation, learning, and systems
+        </p>
       </motion.div>
     </section>
   );

@@ -1,5 +1,6 @@
 ---
 import ThemeCustomizer from './ThemeCustomizer';
+import ThemeToggle from './ThemeToggle.astro';
 
 const currentPath = Astro.url.pathname;
 
@@ -7,6 +8,7 @@ const navLinks = [
   { name: 'home', href: '/' },
   { name: 'projects', href: '/projects' },
   { name: 'posts', href: '/posts' },
+  { name: 'tags', href: '/tags' },
   { name: 'about', href: '/about' },
 ];
 ---
@@ -25,7 +27,10 @@ const navLinks = [
         </a>
       ))}
     </nav>
-    <ThemeCustomizer client:load />
+    <div class="flex gap-3 items-center">
+      <ThemeToggle />
+      <ThemeCustomizer client:load />
+    </div>
   </div>
 </header>
 

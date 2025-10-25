@@ -11,29 +11,30 @@ const sortedPosts = allPosts
 ---
 
 <Layout title="Posts — Cluttered Cabinet">
-  <section class="max-w-6xl mx-auto px-6 md:px-12 pt-24 pb-16">
-    <div class="mb-8">
-      <h1 class="font-mono text-3xl text-text-primary mb-2 font-bold tracking-tight">posts</h1>
-      <p class="text-text-secondary text-sm font-mono">
+  <section class="max-w-4xl mx-auto px-6 md:px-12 pt-24 pb-16">
+    <div class="mb-8 pb-6 border-b border-border">
+      <h1 class="font-mono text-2xl text-text-primary mb-2 tracking-tight">all entries</h1>
+      <p class="text-text-secondary text-xs font-mono">
         {sortedPosts.length} total
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {sortedPosts.map(post => (
+    <div class="space-y-0">
+      {sortedPosts.map((post, index) => (
         <PostCard
           title={post.data.title}
           date={post.data.date}
           summary={post.data.summary}
           slug={post.slug}
           tags={post.data.tags}
+          index={sortedPosts.length - index}
         />
       ))}
     </div>
 
     {sortedPosts.length === 0 && (
       <div class="py-16">
-        <p class="text-text-secondary text-sm font-mono">no posts yet</p>
+        <p class="text-text-secondary text-sm font-mono">no entries yet</p>
       </div>
     )}
   </section>
