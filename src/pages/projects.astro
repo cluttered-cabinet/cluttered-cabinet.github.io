@@ -1,26 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Placeholder projects
 const projects = [
   {
-    title: 'project_one',
-    description: 'exploring neural representations and emergent behaviors in language models',
-    tags: ['ml', 'nlp'],
-    link: '#'
+    slug: 'lumen',
+    title: 'LUMEN',
+    description:
+      'Investigating whether transformer agents can converse by exchanging compressed hidden states instead of tokens—focusing on low-rank bridges, reconstruction metrics, and cross-model alignment.',
+    status: 'open research log',
+    tags: ['agents', 'compression', 'alignment'],
+    link: 'https://github.com/cluttered-cabinet/lumen_v2',
   },
-  {
-    title: 'project_two',
-    description: 'scalable systems for distributed machine learning training and inference',
-    tags: ['systems', 'infra'],
-    link: '#'
-  },
-  {
-    title: 'project_three',
-    description: 'interpretability methods for understanding deep learning models',
-    tags: ['interpretability', 'research'],
-    link: '#'
-  }
 ];
 ---
 
@@ -29,16 +19,21 @@ const projects = [
     <div class="mb-8">
       <h1 class="font-mono text-3xl text-text-primary mb-2 font-bold tracking-tight">projects</h1>
       <p class="text-text-secondary text-sm font-mono">
-        research + experiments
+        hands-on investigations, updated as viability signals emerge
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4">
       {projects.map(project => (
-        <article class="project-card group relative bg-surface border border-border rounded p-4 transition-all duration-200 hover:border-accent">
-          <h2 class="text-lg font-mono font-bold text-text-primary group-hover:text-accent transition-colors mb-2 tracking-tight">
+        <article id={project.slug} class="project-card group relative bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent">
+          <div class="flex items-baseline justify-between gap-4 mb-2">
+            <h2 class="text-lg font-mono font-bold text-text-primary group-hover:text-accent transition-colors tracking-tight">
             {project.title}
           </h2>
+            <span class="text-[10px] uppercase tracking-[0.3em] text-text-secondary font-mono group-hover:text-accent transition-colors">
+              {project.status}
+            </span>
+          </div>
 
           <p class="text-sm text-text-secondary mb-3 font-mono leading-relaxed">
             {project.description}
@@ -52,9 +47,7 @@ const projects = [
             ))}
           </div>
 
-          {project.link !== '#' && (
-            <a href={project.link} class="absolute inset-0" aria-label={`View ${project.title}`}></a>
-          )}
+          <a href={project.link} class="absolute inset-0" aria-label={`View ${project.title}`} target="_blank" rel="noopener noreferrer"></a>
         </article>
       ))}
     </div>

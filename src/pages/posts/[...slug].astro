@@ -10,6 +10,10 @@ export async function getStaticPaths() {
   }));
 }
 
+const projectLabels: Record<string, string> = {
+  lumen: 'LUMEN',
+};
+
 const { post } = Astro.props;
 const { Content } = await post.render();
 
@@ -41,6 +45,22 @@ const formattedDate = post.data.date;
               class="text-xs px-2 py-0.5 bg-surface text-text-secondary hover:text-accent hover:border-accent rounded border border-border font-mono transition-colors no-underline"
             >
               {tag}
+            </a>
+          ))}
+        </div>
+      )}
+
+      {post.data.projects && post.data.projects.length > 0 && (
+        <div class="flex flex-wrap items-center gap-3 mt-5">
+          <span class="text-[10px] uppercase tracking-[0.3em] text-text-secondary font-mono">
+            projects
+          </span>
+          {post.data.projects.map((project: string) => (
+            <a
+              href={`/projects#${project}`}
+              class="inline-flex items-center gap-2 text-xs px-2 py-0.5 bg-surface text-text-secondary hover:text-accent hover:border-accent rounded border border-border font-mono transition-colors no-underline"
+            >
+              {projectLabels[project] ?? project}
             </a>
           ))}
         </div>

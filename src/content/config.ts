@@ -8,6 +8,7 @@ const postsCollection = defineCollection({
     summary: z.string().optional(),
     description: z.string().optional(),
     tags: z.array(z.string()).optional(),
+    projects: z.array(z.string()).optional(),
     toc: z.boolean().optional(),
     draft: z.boolean().optional(),
   }),

@@ -16,7 +16,7 @@ export default {
       },
       fontFamily: {
         mono: ['IBM Plex Mono', 'JetBrains Mono', 'monospace'],
-        sans: ['IBM Plex Mono', 'JetBrains Mono', 'monospace'],
+        sans: ['Inter', 'IBM Plex Mono', 'JetBrains Mono', 'monospace'],
       },
       backgroundImage: {
         'noise': "url('/noise.png')",

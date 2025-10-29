@@ -1,0 +1,69 @@
+---
+const focusAreas = [
+  'Testing whether low-rank latent bridges can carry intent between agents without tokenized messages.',
+  'Measuring reconstruction fidelity vs. compression across transformer layers in modern LLMs.',
+  'Tracing multi-agent workflows for real-world deployments.'
+];
+
+const quickLinks = [
+  {
+    label: 'Project Archive',
+    href: '/projects',
+    description: 'Architecture notes, evaluation runs, and diagrams for LUMEN releases.'
+  },
+  {
+    label: 'Posts Index',
+    href: '/posts',
+    description: 'Latest latent-space experiments, reproduction logs, and just ideas threads.'
+  },
+  {
+    label: 'About & Contact',
+    href: '/about',
+    description: 'Background, open collaboration threads, and ways to reach out.'
+  }
+];
+---
+
+<section class="relative pt-12 pb-16 px-6 md:px-12 bg-surface/40 overflow-hidden">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid gap-12 lg:grid-cols-[1.3fr,1fr] items-start">
+      <div class="space-y-6">
+        <div>
+          <p class="text-xs uppercase tracking-[0.2em] text-text-secondary font-mono mb-3">Research focus</p>
+          <h2 class="text-2xl md:text-3xl font-mono text-text-primary max-w-2xl leading-tight">
+            Investigating LUMEN: token-free agent dialogue via compressed transformer states—and evaluating how viable the approach is outside controlled demos.
+          </h2>
+        </div>
+        <ul class="space-y-3">
+          {focusAreas.map((area) => (
+            <li class="flex items-start gap-3 text-sm text-text-secondary">
+              <span class="mt-1 h-2 w-2 rounded-full bg-accent/80 shrink-0"></span>
+              <span class="leading-relaxed">{area}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div class="rounded-xl border border-border/80 bg-surface/60 p-6 backdrop-blur-sm shadow-[0_0_40px_-30px_var(--accent-color)]">
+          <p class="text-xs uppercase tracking-[0.2em] text-text-secondary font-mono mb-4">Current cadence</p>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            Notebook entries document latent-space probes, compression runs, and cross-model alignment experiments—each run to gauge whether LUMEN holds up under realistic constraints and reproducible code paths.
+          </p>
+        </div>
+
+        <div class="grid gap-3">
+          {quickLinks.map((link) => (
+            <a
+              class="group flex flex-col gap-1 rounded-lg border border-border/80 bg-surface/30 px-4 py-3 transition-all duration-200 hover:border-accent hover:bg-surface/50"
+              href={link.href}
+            >
+              <span class="font-mono text-sm text-text-primary opacity-80 group-hover:text-accent group-hover:opacity-100 transition-colors transition-opacity">{link.label}</span>
+              <span class="text-xs text-text-secondary leading-relaxed">{link.description}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
