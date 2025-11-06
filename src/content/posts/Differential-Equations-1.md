@@ -9,7 +9,7 @@ I've long been interested in modelling biological systems with mathematics. This
 
 # Single Differential Equation (Decay)
 
-The first differential differential equation we're going to look at is simple exponential decay: 
+The first differential equation we're going to look at is simple exponential decay: 
 $$
 \dfrac{dy}{dt} = -y
 $$
@@ -20,13 +20,13 @@ $$
 \begin{aligned}
 \dfrac{dy}{dt} &= -y \\
 - \int \dfrac{1}{y} dy &= \int 1 dt \\
-- ln(y) + k_{1} &= t + k_{2} \\
-ln(y) &= -t + k_{3} \\
+- \ln(y) + k_{1} &= t + k_{2} \\
+\ln(y) &= -t + k_{3} \\
 y &= Ke^{-t}
 \end{aligned}
 $$
 
-In this case, we have one parameter that we dont know, and that is the value of $K$. We can find this with an initial condition. So for example if $y(0) = 1$ then we'd have that
+In this case, we have one parameter that we don't know, and that is the value of $K$. We can find this with an initial condition. So for example if $y(0) = 1$ then we'd have that
 
 $$
 \begin{aligned}
@@ -36,8 +36,6 @@ y(0) &= 1 = Ke^{-0} \\
 $$
 
 Cool. Now let's see how we can build this model and plot the solution: 
-
-
 ```python
 #| code-fold: true
 
@@ -48,7 +46,7 @@ plt.style.use('seaborn')
 plt.rcParams.update({'font.size': 12})
 ```
 
-First thing we need to work through is how to define the model. We'll be using `solve_ivp` rather than `odeint` from the `scipy.integrate` library. Why? Because `odeint` is now outdated. I'll provide a refrence to this later. 
+First thing we need to work through is how to define the model. We'll be using `solve_ivp` rather than `odeint` from the `scipy.integrate` library. Why? Because `odeint` is now outdated. I'll provide a reference to this later. 
 
 In the case of `solve_ivp`, we need to create our model with three things: 
 
@@ -56,15 +54,13 @@ In the case of `solve_ivp`, we need to create our model with three things:
 2. $y$: The variable
 3. Other arguments
 
-At this second, we're going to ignore that last thing, because it's not necessary for us (yet).
+For now, we're going to ignore that last thing, because it's not necessary for us (yet).
 
 Here's how we can model decay:
-
-
 ```python
-def decay_model(t,y):
+def decay_model(t, y):
     """
-    Simple decay model
+    Exponential decay model
     dy/dt = -y
     """
     return -y
@@ -79,8 +75,6 @@ Now that we have our model created, we can feed it into `solve_ivp`. To do this,
 Now there are many other options in `solve_ivp`, but for now we'll go over these, just so we can get familiar. 
 
 We can set the `t_span` to be from $t = 0$ to $t = 10$, which we denote with a tuple. We can set our initial value to be 1 (like we showed above), and we want a dense output. Just to throw a curve ball in there (and not put ourselves to sleep) I'll solve it for a variety of different initial values: 
-
-
 ```python
 #| label: Exponential Decay Graph
 #| fig-cap: Multiple curves showing exponential decay
@@ -88,19 +82,19 @@ We can set the `t_span` to be from $t = 0$ to $t = 10$, which we denote with a t
 
 solution_array = list()
 
-fig, ax = plt.subplots(figsize = (14,7))
+fig, ax = plt.subplots(figsize=(14, 7))
 for i in range(0, 5):     
-    solution = solve_ivp(fun = decay_model,
-                         t_span = [0, 6],
-                         y0 = [i], 
+    solution = solve_ivp(fun=decay_model,
+                         t_span=[0, 6],
+                         y0=[i], 
                          dense_output=True)
 
-    ax.plot(solution.t, solution.y[0], label = fr"$K = {i}$")
+    ax.plot(solution.t, solution.y[0], label=fr"$K = {i}$")
 ax.set_title("Exponential Decay Solution")
 ax.set_ylabel(r'$Ke^{-t}$')
 ax.set_xlabel(r'$t$')
-ax.set_xlim(left = 0, right = max(solution.t))
-ax.set_ylim(bottom = 0)
+ax.set_xlim(left=0, right=max(solution.t))
+ax.set_ylim(bottom=0)
 ax.legend()
 plt.show()
 ```
