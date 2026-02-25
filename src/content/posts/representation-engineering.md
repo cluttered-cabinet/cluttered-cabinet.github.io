@@ -57,7 +57,11 @@ def extract_dim_vector(positive_activations, negative_activations):
     return positive_activations.mean(axis=0) - negative_activations.mean(axis=0)
 ```
 
-It's almost embarrassingly simple. And it works better.
+It's almost embarrassingly simple. And in the benchmarks I've found, it consistently outperforms LAT — but that claim needs caveats.
+
+DiM assumes the class means meaningfully capture the between-class signal. This holds when activations are roughly unimodal and similarly spread within each class. If distributions are multimodal (multiple sub-clusters within "insured" or "uninsured") or heteroskedastic (very different within-class variance), DiM can miss structure that PCA — or covariance-adjusted contrastive methods — would still capture. PCA isn't useless when the first principal component happens to align with the concept; the variance ≠ separability critique is a tendency, not a law.
+
+The more honest framing: DiM is a strong *default*, not a universal winner. I haven't benchmarked against covariance-adjusted directions or contrastive CCA — approaches that account for within-class covariance rather than ignoring it. That comparison is on the roadmap.
 
 There are a few other practical advantages:
 - **Sample efficiency**: DiM works with fewer paired examples. PCA needs enough samples to get a stable covariance estimate.
@@ -198,6 +202,8 @@ The most interesting recent work tries to combine the two approaches.
 
 I'm planning to implement SDCV as the next iteration. The current pipeline uses raw DiM, which works but has the asymmetry problem Im & Li identified.
 
+The broader point is that the field is trending toward these hybrids — not toward a settled choice between probes and SAEs. Framing them as competing endpoints is increasingly the wrong model. The interesting questions are about *which combination*, under *what conditions*, and at *what added cost*.
+
 ---
 
 ## Validation: The Part Everyone Skips
@@ -218,6 +224,8 @@ This is a set of tests that try to establish causal responsibility of the steeri
 6. **Side effects**: Track perplexity and QA task performance under steering. High-strength steering that degrades language quality isn't useful.
 
 The termination + recovery pair is the key causal test. If projecting out the vector eliminates the behavior, that's evidence the vector is causally responsible (not just correlated with it). Recovery confirms it's recoverable — the model's underlying capability isn't destroyed.
+
+One important limitation here: termination/recovery establishes that *this vector* causes the effect, but it doesn't establish that the vector is concept-*specific*. If health insurance status co-varies with income, education, and urban/rural status in training data, the DiM vector may encode all of those simultaneously. Projecting it out removes all of that correlated signal, not just the concept. CARE-style frameworks — approaches that use matched-pair designs or do-calculus interventions to isolate causally specific features — go further, and I haven't implemented them. In practice, the specificity test (#5 above) is carrying a lot of weight in the causal argument, and may not be sufficient on its own.
 
 ```python
 def project_out(activations, vector):
@@ -292,7 +300,9 @@ What I'm still working out:
 
 **Underestimating paired vignette quality**: My first vignette sets had too much noise. Pairs that differed on multiple dimensions at once made the extracted vectors muddy. Cleaner pairs = cleaner vectors. This seems obvious in retrospect.
 
-**Thinking probes and SAEs were competing**: Spent time trying to figure out which one to use. The answer is: probes for classification/steering, SAEs for feature discovery. They're not in competition, they're doing different things.
+**Thinking probes and SAEs were competing**: Spent time trying to figure out which one to use. The answer is: probes for classification/steering, SAEs for feature discovery. They're not in competition, they're doing different things. The more useful question — which I got to late — is which hybrid combination gives you the best of both.
+
+**Treating DiM as a solved problem**: It outperforms LAT in the benchmarks I found, but I haven't compared it against methods that account for within-class covariance structure (contrastive CCA, conditional ICA). "Better than PCA" isn't the same as "best available." This is an open empirical question.
 
 ---
 
@@ -300,8 +310,10 @@ What I'm still working out:
 
 1. Implement SDCV (denoised DiM) and compare against raw DiM on asymmetry tests
 2. Run the convergence test — this is the key empirical result
-3. Add cross-model validation (Qwen-2.5-7B is the second model)
-4. Start the safety audit (StereoSet integration)
-5. Write the calibration section with actual GSS alignment numbers
+3. Benchmark DiM against covariance-adjusted contrastive methods (contrastive CCA) on the extraction task — "better than PCA" needs a wider comparison set
+4. Add cross-model validation (Qwen-2.5-7B is the second model; need at least three for the NeurIPS case)
+5. Start the safety audit (StereoSet integration)
+6. Write the calibration section with actual GSS alignment numbers
+7. Tighten causal claims — either implement matched-pair controls or scope down what the termination/recovery tests actually prove
 
 The framework exists. The validation suite is designed. I just need the experiments to run.
