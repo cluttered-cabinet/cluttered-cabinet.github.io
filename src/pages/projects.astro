@@ -10,6 +10,7 @@ const projects = [
     status: 'production',
     tags: ['multi-agent', 'orchestration', 'PydanticAI'],
     link: null,
+    internal: true,
   },
   {
     slug: 'ada',
@@ -19,6 +20,7 @@ const projects = [
     status: 'production',
     tags: ['agents', 'MCP', 'healthcare', 'PydanticAI'],
     link: null,
+    internal: true,
   },
   {
     slug: 'pistachio',
@@ -28,6 +30,7 @@ const projects = [
     status: 'production',
     tags: ['agents', 'analytics', 'DSL', 'MCP', 'FastAPI'],
     link: null,
+    internal: true,
   },
   {
     slug: 'synthetic-market-research',
@@ -37,6 +40,7 @@ const projects = [
     status: 'production',
     tags: ['LLMs', 'evaluation', 'KL-divergence'],
     link: null,
+    internal: true,
   },
   {
     slug: 'lumen',
@@ -46,6 +50,7 @@ const projects = [
     status: 'open research',
     tags: ['agents', 'compression', 'alignment'],
     link: 'https://github.com/cluttered-cabinet/lumen_v2',
+    internal: false,
   },
   {
     slug: 'representation-engineering',
@@ -55,6 +60,7 @@ const projects = [
     status: 'active research',
     tags: ['representation-engineering', 'steering', 'interpretability'],
     link: null,
+    internal: false,
   },
 ];
 ---
@@ -76,7 +82,7 @@ const projects = [
               {project.title}
             </h2>
             <div class="flex items-center gap-2">
-              {project.link === null && (
+              {project.internal && (
                 <span class="text-[10px] uppercase tracking-[0.3em] text-text-secondary font-mono">
                   internal
                 </span>
