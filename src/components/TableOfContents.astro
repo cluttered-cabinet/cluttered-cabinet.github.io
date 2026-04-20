@@ -1,0 +1,266 @@
+---
+export interface Props {
+  heading?: string;
+}
+
+const { heading = "Table of Contents" } = Astro.props as Props;
+---
+
+<div class="toc-wrapper">
+  <nav class="toc-desktop" aria-label={heading} data-toc-desktop>
+    <p class="toc-title">{heading}</p>
+    <div data-toc-list></div>
+  </nav>
+
+  <details class="toc-mobile" data-toc-mobile>
+    <summary>
+      <span>{heading}</span>
+      <span aria-hidden="true" class="chevron">▾</span>
+    </summary>
+    <div data-toc-list-mobile></div>
+  </details>
+</div>
+
+<script>
+  declare global {
+    interface Window {
+      __blogTocObserver?: IntersectionObserver;
+    }
+  }
+
+  (() => {
+    type TocItem = {
+      id: string;
+      text: string;
+      level: number;
+    };
+
+    const slugify = (input: string) =>
+      String(input || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[\s]+/g, "-")
+        .replace(/[^a-z0-9\-]/g, "")
+        .replace(/-{2,}/g, "-");
+
+    const buildItems = (headings: HTMLHeadingElement[]): TocItem[] => {
+      const counter = new Map<string, number>();
+      return headings.map((heading) => {
+        const level = heading.tagName === "H2" ? 2 : heading.tagName === "H3" ? 3 : 4;
+        const baseId = heading.id || slugify(heading.textContent || "section");
+        const count = counter.get(baseId) ?? 0;
+        const id = count ? `${baseId}-${count + 1}` : baseId;
+        counter.set(baseId, count + 1);
+        heading.id = id;
+        return {
+          id,
+          text: heading.textContent?.trim() || "",
+          level,
+        };
+      });
+    };
+
+    const renderList = (items: TocItem[], holder: HTMLElement) => {
+      holder.innerHTML = "";
+      const ul = document.createElement("ul");
+      ul.className = "toc-list";
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = `toc-item level-${item.level}`;
+        const link = document.createElement("a");
+        link.href = `#${item.id}`;
+        link.textContent = item.text;
+        link.dataset.tocLink = item.id;
+        link.className = `toc-link level-${item.level}`;
+        link.setAttribute("role", "link");
+        li.appendChild(link);
+        ul.appendChild(li);
+      });
+      holder.appendChild(ul);
+    };
+
+    const setActive = (id: string | null) => {
+      const links = document.querySelectorAll<HTMLElement>('[data-toc-link]');
+      links.forEach((link) => {
+        const isActive = link.dataset.tocLink === id;
+        link.classList.toggle("active", isActive);
+      });
+    };
+
+    const init = () => {
+      const article = document.querySelector<HTMLElement>("[data-article-body]");
+      const desktopContainer = document.querySelector<HTMLElement>("[data-toc-list]");
+      const mobileContainer = document.querySelector<HTMLElement>("[data-toc-list-mobile]");
+      const desktopNav = document.querySelector<HTMLElement>("[data-toc-desktop]");
+      const mobileDetails = document.querySelector<HTMLDetailsElement>("[data-toc-mobile]");
+
+      if (!article || !desktopContainer || !mobileContainer || !desktopNav || !mobileDetails) {
+        return;
+      }
+
+      const headings = Array.from(article.querySelectorAll<HTMLHeadingElement>("h2, h3, h4")).filter(
+        (heading) => !heading.hasAttribute("data-toc-skip"),
+      );
+
+      if (!headings.length) {
+        desktopNav.classList.add("hidden");
+        mobileDetails.hidden = true;
+        return;
+      }
+
+      const items = buildItems(headings);
+      renderList(items, desktopContainer);
+      renderList(items, mobileContainer);
+
+      window.__blogTocObserver?.disconnect();
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          if (visible.length) {
+            setActive(visible[0].target.id);
+          } else {
+            const scrolled = headings
+              .filter((h) => h.getBoundingClientRect().top <= 120)
+              .pop();
+            if (scrolled) setActive(scrolled.id);
+          }
+        },
+        {
+          rootMargin: "-40% 0px -40% 0px",
+          threshold: [0, 0.25, 0.5, 0.75, 1],
+        },
+      );
+
+      headings.forEach((heading) => observer.observe(heading));
+      window.__blogTocObserver = observer;
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init, { once: true });
+    } else {
+      init();
+    }
+
+    document.addEventListener("astro:after-swap", () => setTimeout(init, 0));
+  })();
+</script>
+
+<style>
+  .toc-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .toc-desktop {
+    display: none;
+  }
+
+  .toc-title {
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .toc-item {
+    margin: 0.25rem 0;
+  }
+
+  .toc-link {
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: block;
+    padding: 0.2rem 0;
+    border-radius: 4px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .toc-link:hover {
+    color: var(--accent-color);
+  }
+
+  .toc-link.active {
+    color: var(--accent-color);
+  }
+
+  .toc-link.level-3 {
+    padding-left: 0.8rem;
+  }
+
+  .toc-link.level-4 {
+    padding-left: 1.6rem;
+    font-size: 0.72rem;
+  }
+
+  .toc-mobile {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--surface);
+    overflow: hidden;
+  }
+
+  .toc-mobile[hidden] {
+    display: none;
+  }
+
+  .toc-mobile summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0.85rem;
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .toc-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc-mobile .chevron {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    transition: transform 0.2s ease;
+  }
+
+  .toc-mobile[open] .chevron {
+    transform: rotate(180deg);
+  }
+
+  .toc-mobile [data-toc-list-mobile] {
+    padding: 0.5rem 0.85rem 0.85rem;
+  }
+
+  @media (min-width: 1024px) {
+    .toc-desktop {
+      display: block;
+      position: sticky;
+      top: 6.5rem;
+      border-left: 1px solid var(--border);
+      padding-left: 1rem;
+      padding-right: 0.5rem;
+      max-height: calc(100vh - 7rem);
+      overflow-y: auto;
+    }
+
+    .toc-mobile {
+      display: none;
+    }
+  }
+</style>

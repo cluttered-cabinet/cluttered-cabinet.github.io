@@ -1,0 +1,99 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = 'Glossary', description } = Astro.props as Props;
+---
+
+<section class="glossary">
+  <header class="glossary-header">
+    <h2>{title}</h2>
+    {description && <p class="glossary-description">{description}</p>}
+  </header>
+  <dl class="glossary-list">
+    <slot />
+  </dl>
+</section>
+
+<style>
+  .glossary {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem 1.75rem;
+    background: var(--surface);
+    margin: 2.5rem 0;
+  }
+
+  .glossary-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .glossary-header h2 {
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+    font-size: 1rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .glossary-description {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .glossary-list {
+    display: grid;
+    grid-template-columns: minmax(120px, 0.8fr) minmax(0, 2.2fr);
+    gap: 1.1rem 1.5rem;
+    margin: 0;
+  }
+
+  .glossary-list :global(dt) {
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .glossary-list :global(dd) {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    line-height: 1.65;
+  }
+
+  .glossary-list :global(dd > p:first-child) {
+    margin-top: 0;
+  }
+
+  .glossary-list :global(dd > p:last-child) {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    .glossary-list {
+      display: block;
+    }
+
+    .glossary-list :global(dt) {
+      margin-bottom: 0.35rem;
+    }
+
+    .glossary-list :global(dd) {
+      margin-bottom: 1.1rem;
+    }
+
+    .glossary-list :global(dd:last-child) {
+      margin-bottom: 0;
+    }
+  }
+</style>

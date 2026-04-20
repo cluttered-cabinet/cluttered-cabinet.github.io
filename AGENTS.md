@@ -29,5 +29,7 @@
 - PRs should include: a summary of intent, testing performed (`build`, `preview`, etc.), linked issues when applicable, and media for UI changes.
 
 ## Content & Asset Management
+- Posts support MDX; import components from `src/components/` for callouts (`<Note />`) and future interactive blocks.
+- Do not introduce emojis anywhere in site content, commit messages, or tooling output.
 - Posts generated from notebooks should pass through `scripts/convert-notebook.py` to normalize frontmatter and asset references.
 - Store large assets outside the repo and reference them via URLs when feasible; keep inline images optimized (≤1200px wide, compressed).

@@ -1,0 +1,23 @@
+---
+export interface Props {
+  term: string;
+  anchor?: string;
+}
+
+const { term, anchor } = Astro.props as Props;
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[\s]+/g, '-')
+    .replace(/[^a-z0-9\-]/g, '')
+    .replace(/-{2,}/g, '-');
+
+const id = anchor || slugify(term);
+---
+
+<dt id={id}>{term}</dt>
+<dd aria-labelledby={id}>
+  <slot />
+</dd>

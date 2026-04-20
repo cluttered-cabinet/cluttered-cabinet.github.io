@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -19,12 +20,24 @@ const { Content } = await post.render();
 
 // Use simple date format
 const formattedDate = post.data.date;
+const showTableOfContents = post.data.toc !== false;
+const contentWrapperClass = [
+  'flex flex-col gap-10',
+  showTableOfContents
+    ? 'lg:grid lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-16'
+    : 'lg:max-w-3xl lg:mx-auto',
+].filter(Boolean).join(' ');
+const contentColumnClass = showTableOfContents
+  ? 'order-2 lg:order-1 min-w-0'
+  : 'min-w-0';
+const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
 ---
 
 <Layout title={`${post.data.title} — Cluttered Cabinet`} description={post.data.description || post.data.summary}>
-  <article class="max-w-3xl mx-auto px-6 md:px-12 pt-24 pb-16">
-    <!-- Post Header -->
-    <header class="mb-8 border-b border-border pb-6">
+  <article class="px-6 md:px-12 pt-24 pb-16">
+    <div class="mx-auto max-w-6xl">
+      <!-- Post Header -->
+      <header class="mb-10 border-b border-border pb-6">
       <time class="text-xs text-text-secondary block mb-3 font-mono">{formattedDate}</time>
 
       <h1 class="font-mono text-3xl text-text-primary mb-4 font-bold tracking-tight">
@@ -67,16 +80,26 @@ const formattedDate = post.data.date;
       )}
     </header>
 
-    <!-- Post Content -->
-    <div class="prose prose-invert max-w-none">
-      <Content />
-    </div>
+      <div class={contentWrapperClass}>
+        <div class={contentColumnClass}>
+          <!-- Post Content -->
+          <div class="prose prose-invert max-w-none" data-article-body>
+            <Content />
+          </div>
+        </div>
+        {showTableOfContents && (
+          <div class={tocColumnClass}>
+            <TableOfContents />
+          </div>
+        )}
+      </div>
 
-    <!-- Back Link -->
-    <div class="mt-12 pt-6 border-t border-border">
-      <a href="/posts" class="text-accent hover:text-accent-bright text-sm font-mono">
-        ← back
-      </a>
+      <!-- Back Link -->
+      <div class="mt-12 pt-6 border-t border-border">
+        <a href="/posts" class="text-accent hover:text-accent-bright text-sm font-mono">
+          ← back
+        </a>
+      </div>
     </div>
   </article>
 </Layout>
@@ -140,7 +163,11 @@ const formattedDate = post.data.date;
   }
 
   .prose :global(code) {
-    @apply bg-surface px-1.5 py-0.5 rounded text-accent text-xs font-mono;
+    @apply font-mono text-xs;
+  }
+
+  .prose :global(:not(pre) > code) {
+    @apply bg-surface px-1.5 py-0.5 rounded text-accent;
   }
 
   .prose :global(pre) {
@@ -148,7 +175,7 @@ const formattedDate = post.data.date;
   }
 
   .prose :global(pre code) {
-    @apply bg-transparent p-0 text-text-primary;
+    @apply bg-transparent p-0;
   }
 
   .prose :global(ul), .prose :global(ol) {
