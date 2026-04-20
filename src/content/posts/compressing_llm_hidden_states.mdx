@@ -1,0 +1,210 @@
+---
+title: "Compressing LLM Hidden States: Finding the Sweet Spot"
+date: "2025-10-25"
+summary: "Turns out you can squeeze 3072-dimensional hidden states down by 24x while preserving most of their structure...kinda."
+tags: ["SVD", "compression"]
+draft: false
+---
+
+import Note from '../../components/Note.astro';
+import Image from '../../components/Image.astro';
+import Glossary from '../../components/Glossary.astro';
+import GlossaryEntry from '../../components/GlossaryEntry.astro';
+
+## What I'm Doing Here
+
+Large language models represent text internally as massive vectors (3072 dimensions for Llama-3.2-3B). If agents need to communicate efficiently (sending hidden states over a network or storing them compactly), I need compression. Specifically, I need to preserve the **semantic structure** that makes these representations useful.
+
+The approach: low-rank factorization. Instead of storing a full 3072-dim vector, I compress through a bottleneck:
+
+$$h \xrightarrow{U} z \xrightarrow{V} \hat{h}$$
+
+Where:
+
+- $h$ is the original hidden state (3072-dim)
+- $z$ is the compressed representation (rank-dim)
+- $\hat{h}$ is the reconstruction
+
+The question: **How small can we make the rank while keeping the important stuff?**
+
+---
+
+## The Experiment
+
+I extracted hidden states from 100 prompts using Llama-3.2-3B, then trained low-rank bridges at five different ranks: 16, 32, 64, 128, and 256. Each bridge was trained for 50 epochs using a combined loss:
+
+$$\mathcal{L} = \text{MSE}(h, \hat{h}) + (1 - \text{CosineSim}(h, \hat{h}))$$
+
+This balances exact reconstruction (MSE) with directional preservation (cosine similarity).
+
+For evaluation, I used three metrics:
+
+- **MSE**: How close are the raw values?
+- **Cosine Similarity**: Do the directions match?
+- **CKA (Centered Kernel Alignment)**: Are the relationships between samples preserved?
+
+CKA is what I actually care about. It measures whether the compressed representations maintain the same structure between samples, separate from whether any individual vector is close to its original.
+
+<Note variant="info" title="Why CKA?">
+  <p>
+    CKA focuses on the geometry of representations. Two embeddings can look very different under MSE yet encode the same relationships between examples. When agents communicate compressed states, preserving geometry is what keeps downstream policies working.
+  </p>
+</Note>
+
+<Note variant="info" title="How I define compression ratio">
+  <p>
+    Compression ratio here is vector dimensionality reduction: 3072 / rank. Rank 64 compresses a 3072-dim hidden state down to 64 numbers, so 48x.
+  </p>
+</Note>
+
+---
+
+## Results: The Compression-Quality Tradeoff
+
+<Image
+  src="/posts/compressing_llm_hidden_states/fig1_compression_vs_cka.png"
+  alt="Compression vs CKA curve for ranks 16–256 showing how structure preserves at different bottlenecks."
+  caption="Compression ratio versus CKA structure retention. Rank 16 keeps more structure than expected."
+/>
+
+At rank 256 (12x compression), I preserve 89% of the structure. At rank 16 (192x compression), I still retain 72%. The sweet spot appears around ranks 64 to 128, where I get 24x to 48x compression while keeping 75-86% of the structural information.
+
+Breaking down all the metrics:
+
+![All Metrics](/posts/compressing_llm_hidden_states/fig2_all_metrics.png)
+
+All three metrics agree on the trend: higher rank = better reconstruction. But the absolute values differ significantly. MSE is harsh (even at rank 256, I have 0.20 error), while CKA is more forgiving (0.89 structure preservation).
+
+---
+
+## The Rank-32 Anomaly
+
+Then things get weird:
+
+![Rank-32 Anomaly](/posts/compressing_llm_hidden_states/fig3_rank32_anomaly.png)
+
+Rank 32 performs **worse** than rank 16. The CKA drops to 0.67, breaking the otherwise smooth trend. Why?
+
+A few theories:
+
+1. **Bad initialization**: Random seed luck struck
+2. **Optimization got stuck**: Local minimum trapped the training
+3. **Architectural quirk**: Something about that specific rank
+
+The fact that rank 16 outperforms rank 32 suggests this is about the optimization landscape. I'd need to rerun rank 32 with different seeds to confirm, but there seems to be an instability in the middle compression regime.
+
+> [!warning]
+> Middle ranks are the sharpest part of the loss surface. A narrow bottleneck exaggerates variance from initialization, so re-running with multiple seeds (or better priors) is probably essential if you deploy at rank 32 to 64.
+
+---
+
+## Efficiency Analysis
+
+If I care about getting the most structure per byte, which rank wins?
+
+![Efficiency](/posts/compressing_llm_hidden_states/fig4_efficiency.png)
+
+Rank 16 dominates on efficiency. It only preserves 72% of the structure, but it achieves 192x compression. If you need extreme compression and can tolerate some structural loss, this is your pick.
+
+For most practical applications, rank 64 or 128 hits a better balance: 24x to 48x compression with 75-86% CKA.
+
+---
+
+## The Full Picture
+
+![Heatmap](/posts/compressing_llm_hidden_states/fig5_heatmap_all_results.png)
+
+The heatmap reveals something: **the metrics don't always agree**. At rank 16, CKA is 0.72 but cosine similarity is only 0.19. Even when individual vectors don't align well directionally, the overall structure can still be preserved.
+
+That's why CKA is the metric I trust at eval time, over reconstruction loss alone.
+
+---
+
+## Key Takeaways
+
+<Note variant="success" title="What worked">
+  <ul>
+    <li>Low-rank bridges stay faithful. Rank 16 still keeps ~72% of the structure, which is enough for many agent handoffs.</li>
+    <li>Ranks 64 to 128 feel like the pragmatic zone: 24x to 48x compression with &gt;75% CKA keeps behavior stable without bloating payloads.</li>
+  </ul>
+</Note>
+
+<Note variant="warning" title="What still hurts">
+  <ul>
+    <li>Rank 32 plateaued below expectations. I need more seeds (and maybe smarter initialization) before trusting the middle of the curve.</li>
+    <li>Optimization is brittle when the bottleneck is tight. The loss landscape gets spiky, so monitoring more than MSE is critical.</li>
+  </ul>
+</Note>
+
+<Note variant="info" title="Instrumentation reminders">
+  <ul>
+    <li>Use CKA (or representational similarity metrics) to track structure. MSE and cosine miss scenarios where geometry survives but raw vectors diverge.</li>
+    <li>Log compression ratio next to every metric. The trade-off plot is what lets me pick the right rank for a downstream partner.</li>
+  </ul>
+</Note>
+
+---
+
+## Minimal Training Loop
+
+```python
+import torch
+import torch.nn as nn
+
+class LowRankBridge(nn.Module):
+    def __init__(self, hidden_size: int, rank: int):
+        super().__init__()
+        self.encoder = nn.Linear(hidden_size, rank, bias=False)
+        self.decoder = nn.Linear(rank, hidden_size, bias=False)
+
+    def forward(self, x):
+        return self.decoder(self.encoder(x))
+
+bridge = LowRankBridge(hidden_size=3072, rank=128).cuda()
+criterion = nn.MSELoss()
+optimizer = torch.optim.Adam(bridge.parameters(), lr=1e-3)
+
+for batch in dataloader:
+    batch = batch.cuda()
+    recon = bridge(batch)
+    mse = criterion(recon, batch)
+    cosine = 1 - nn.functional.cosine_similarity(recon, batch).mean()
+    loss = mse + cosine
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+```
+
+The loop is intentionally stripped down. The interesting parts happen in the metrics that run after each update.
+
+---
+
+## What's Next?
+
+Three immediate directions:
+
+**Cross-model alignment**: Extract hidden states from different models (Llama, Qwen, etc.), train bridges for each, then learn alignment layers between their compressed spaces. Can I build a universal compressed representation?
+
+**The rank-32 mystery**: Rerun with different seeds. Is this real or just unlucky initialization?
+
+**Progressive training**: Start with pure MSE to learn basic reconstruction, then switch to MSE+cosine to refine for structure. Does this improve final CKA?
+
+---
+
+## Methodology
+
+**How I did this**: 100 prompts, Llama-3.2-3B final layer, 50 epochs, Adam (lr=0.001), ~12s on an A100.
+
+---
+
+<Glossary description="Quick references for the metrics and tricks used throughout the experiment.">
+  <GlossaryEntry term="CKA">
+    <p>Centered Kernel Alignment; measures how similarly two representation spaces encode relationships between samples.</p>
+  </GlossaryEntry>
+  <GlossaryEntry term="Low-rank bridge">
+    <p>A pair of learned linear maps that compress and reconstruct hidden states through a bottleneck.</p>
+  </GlossaryEntry>
+  <GlossaryEntry term="Compression ratio">
+    <p>The factor between the original hidden width and the rank of the bottleneck. Rank&nbsp;64 on a 3072-dim layer yields roughly 48x compression.</p>
+  </GlossaryEntry>
+</Glossary>

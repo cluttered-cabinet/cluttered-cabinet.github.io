@@ -3,13 +3,58 @@ import Layout from '../layouts/Layout.astro';
 
 const projects = [
   {
+    slug: 'maestro',
+    title: 'Maestro',
+    description:
+      'Multi-agent orchestrator with dynamic agent discovery and hierarchical context loading. Central coordinator that routes to specialized sub-agents, manages session state, and handles cross-agent context filtering for token efficiency. Built on PydanticAI.',
+    status: 'production',
+    tags: ['multi-agent', 'orchestration', 'PydanticAI'],
+    link: null,
+  },
+  {
+    slug: 'ada',
+    title: 'ADA',
+    description:
+      'Clinical reasoning agent built on PydanticAI with MCP servers. Translates complex clinical data contexts into structured outputs for medical strategy teams.',
+    status: 'production',
+    tags: ['agents', 'MCP', 'healthcare', 'PydanticAI'],
+    link: null,
+  },
+  {
+    slug: 'pistachio',
+    title: 'Pistachio',
+    description:
+      'Analytics agent using a hybrid FastAPI/MCP pattern. Translates natural language queries into a custom DSL, which a lambda function compiles to SQL. The DSL compiler enforces safety by construction — the agent literally cannot express operations outside the allowed set. Results feed into interpretation and chart generation.',
+    status: 'production',
+    tags: ['agents', 'analytics', 'DSL', 'MCP', 'FastAPI'],
+    link: null,
+  },
+  {
+    slug: 'synthetic-market-research',
+    title: 'Synthetic Market Research',
+    description:
+      'Platform using LLMs as proxy survey respondents with KL divergence validation against real population distributions (GSS, ACS, CDC SDOH). Generates synthetic panels calibrated to demographic and attitudinal ground truth.',
+    status: 'production',
+    tags: ['LLMs', 'evaluation', 'KL-divergence'],
+    link: null,
+  },
+  {
     slug: 'lumen',
     title: 'LUMEN',
     description:
       'Investigating whether transformer agents can converse by exchanging compressed hidden states instead of tokens—focusing on low-rank bridges, reconstruction metrics, and cross-model alignment.',
-    status: 'open research log',
+    status: 'open research',
     tags: ['agents', 'compression', 'alignment'],
     link: 'https://github.com/cluttered-cabinet/lumen_v2',
+  },
+  {
+    slug: 'representation-engineering',
+    title: 'Representation Engineering',
+    description:
+      'DiM-based steering vectors for controllable LLM personas. Demographic simulation validated against GSS/ACS survey distributions, with a causal validation suite covering termination, recovery, and specificity. Targeting NeurIPS.',
+    status: 'active research',
+    tags: ['representation-engineering', 'steering', 'interpretability'],
+    link: null,
   },
 ];
 ---
@@ -28,11 +73,18 @@ const projects = [
         <article id={project.slug} class="project-card group relative bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent">
           <div class="flex items-baseline justify-between gap-4 mb-2">
             <h2 class="text-lg font-mono font-bold text-text-primary group-hover:text-accent transition-colors tracking-tight">
-            {project.title}
-          </h2>
-            <span class="text-[10px] uppercase tracking-[0.3em] text-text-secondary font-mono group-hover:text-accent transition-colors">
-              {project.status}
-            </span>
+              {project.title}
+            </h2>
+            <div class="flex items-center gap-2">
+              {project.link === null && (
+                <span class="text-[10px] uppercase tracking-[0.3em] text-text-secondary font-mono">
+                  internal
+                </span>
+              )}
+              <span class="text-[10px] uppercase tracking-[0.3em] text-text-secondary font-mono group-hover:text-accent transition-colors">
+                {project.status}
+              </span>
+            </div>
           </div>
 
           <p class="text-sm text-text-secondary mb-3 font-mono leading-relaxed">
@@ -47,7 +99,9 @@ const projects = [
             ))}
           </div>
 
-          <a href={project.link} class="absolute inset-0" aria-label={`View ${project.title}`} target="_blank" rel="noopener noreferrer"></a>
+          {project.link && (
+            <a href={project.link} class="absolute inset-0" aria-label={`View ${project.title}`} target="_blank" rel="noopener noreferrer"></a>
+          )}
         </article>
       ))}
     </div>

@@ -2,7 +2,7 @@
 title: "Compression Demonstration"
 date: "2025-10-25"
 summary: "Demonstrating how matrix multiplication via SVD can compress an image, and measure how much information (variance) and structure (CKA) are preserved as we reduce the number of components"
-tags: ["SVD", "compresion"]
+tags: ["SVD", "compression"]
 draft: false
 ---
 

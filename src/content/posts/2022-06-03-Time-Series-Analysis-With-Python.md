@@ -148,9 +148,9 @@ $$
 A bit more interesting is the seasonal naive method, which doesn't take the last value, but the last value of the previous season. A good example of this may be when measuring consumption of electricity, which we know is cyclic (see above). In that case, you may expect the energy consumption today to be similar to the energy consumption last year. In this case, we introduce a new variable, $m$ which is the seasonal period. We can also replace the `1` we've been using (as a way to indicate we want to the forecast for the next time step) with $h$, making it more general. So we can define this as: 
 
 $$
-\hat{y}_{T+h | T} = y_{T + 1 - m(k+1)}
+\hat{y}_{T+h | T} = y_{T + h - m(k+1)}
 $$
 
-Where $k$ is the integer result of $(h-1)/m$
+Where $k$ is the integer part of $(h-1)/m$
 
 Now I've got to get going, but my post tomorrow will keep going down this road.

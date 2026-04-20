@@ -4,6 +4,7 @@ date: "2025-01-01"
 summary: "Working with agents and building tools for LLMs."
 description: "Working with agents."
 tags: ["llms", "agents"]
+draft: true
 ---
 - Get agent to run docker container, access it, then run a random forest model on some data.
 - Listened to a podcast once that said the biggest issue with a lot of agentic work is the lack of tools which have good interfaces for LLMs. So I should create good tools.

@@ -23,8 +23,8 @@ y = \underline{X}\bar{w} + \bar{b}
 $$
 Where $\underline{X}$ is a matrix, $\bar{w}, \bar{b}$ are vectors. It's important to know the dimensions of our matrix and vectors. Here we have $\underline{X}$ in the shape of (num_samples, num_features). So really that should be ($n$, 2) where $n$ is the number of samples we have. Our vectors on the other hand will be of the shape:  
 
-- $w$: (num_samples, 1)
-- $b$: (num_samples, 1)
+- $w$: (num_features, 1)
+- $b$: scalar in practice, but drawn below as (num_samples, 1) to keep the matrix shapes aligned
 
 
 To be as clear as possible, our equation looks like this: 

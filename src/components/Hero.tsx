@@ -23,7 +23,7 @@ export default function Hero() {
         </p>
 
         <p className="text-text-secondary text-sm max-w-2xl font-mono">
-          experiments in representation, learning, and systems
+          production agentic systems · representation engineering · applied ml
         </p>
       </motion.div>
     </section>
