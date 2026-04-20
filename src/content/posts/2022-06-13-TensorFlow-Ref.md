@@ -3,6 +3,7 @@ title: TensorFlow Reference
 description: Self-explanatory. I'll add the places I used here d2l.ai
 date: "2022-06-13"
 tags: [jupyter, python, tensorflow]
+draft: true
 ---
 
 

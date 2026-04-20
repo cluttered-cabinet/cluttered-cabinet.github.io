@@ -4,6 +4,7 @@ date: "2024-06-26"
 summary: "Following Andrej Karpathy's lecture on building a neural network from scratch."
 description: "Coding micrograd."
 tags: ["micrograd", "ml"]
+draft: true
 ---
 
 
