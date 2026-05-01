@@ -18,13 +18,12 @@ const projectLabels: Record<string, string> = {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
-// Use simple date format
 const formattedDate = post.data.date;
 const showTableOfContents = post.data.toc !== false;
 const contentWrapperClass = [
   'flex flex-col gap-10',
   showTableOfContents
-    ? 'lg:grid lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-16'
+    ? 'lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-16'
     : 'lg:max-w-3xl lg:mx-auto',
 ].filter(Boolean).join(' ');
 const contentColumnClass = showTableOfContents
@@ -34,56 +33,50 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
 ---
 
 <Layout title={`${post.data.title} — Cluttered Cabinet`} description={post.data.description || post.data.summary}>
-  <article class="px-6 md:px-12 pt-24 pb-16">
-    <div class="mx-auto max-w-6xl">
-      <!-- Post Header -->
-      <header class="mb-10 border-b border-border pb-6">
-      <time class="text-xs text-text-secondary block mb-3 font-mono">{formattedDate}</time>
-
-      <h1 class="font-mono text-3xl text-text-primary mb-4 font-bold tracking-tight">
-        {post.data.title}
-      </h1>
-
-      {post.data.summary && (
-        <p class="text-sm text-text-secondary leading-relaxed font-mono">
-          {post.data.summary}
-        </p>
-      )}
-
-      {post.data.tags && post.data.tags.length > 0 && (
-        <div class="flex flex-wrap gap-2 mt-4">
-          {post.data.tags.map((tag: string) => (
-            <a
-              href={`/tags/${tag}`}
-              class="text-xs px-2 py-0.5 bg-surface text-text-secondary hover:text-accent hover:border-accent rounded border border-border font-mono transition-colors no-underline"
-            >
-              {tag}
-            </a>
-          ))}
+  <article class="px-6 md:px-10 pt-16 md:pt-24 pb-20">
+    <div class="mx-auto max-w-[1200px]">
+      <header class="mb-12 border-b border-slate-dark pb-8">
+        <div class="flex items-baseline gap-4 mb-6">
+          <span class="mono-label">Date</span>
+          <time class="mono-label" style="color: var(--color-slate-dark)">{formattedDate}</time>
         </div>
-      )}
 
-      {post.data.projects && post.data.projects.length > 0 && (
-        <div class="flex flex-wrap items-center gap-3 mt-5">
-          <span class="text-[10px] uppercase tracking-[0.3em] text-text-secondary font-mono">
-            projects
-          </span>
-          {post.data.projects.map((project: string) => (
-            <a
-              href={`/projects#${project}`}
-              class="inline-flex items-center gap-2 text-xs px-2 py-0.5 bg-surface text-text-secondary hover:text-accent hover:border-accent rounded border border-border font-mono transition-colors no-underline"
-            >
-              {projectLabels[project] ?? project}
-            </a>
-          ))}
-        </div>
-      )}
-    </header>
+        <h1 class="font-serif text-[44px] md:text-[64px] lg:text-[76px] leading-[1.05] tracking-tight2 text-slate-dark mb-6 max-w-4xl">
+          {post.data.title}
+        </h1>
+
+        {post.data.summary && (
+          <p class="font-sans text-[18px] md:text-[20px] leading-[1.45] text-slate-dark max-w-3xl">
+            {post.data.summary}
+          </p>
+        )}
+
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mt-8">
+            <span class="mono-label">Tags</span>
+            {post.data.tags.map((tag: string) => (
+              <a href={`/tags/${tag}`} class="mono-label hover:text-slate-dark no-underline">
+                {tag}
+              </a>
+            ))}
+          </div>
+        )}
+
+        {post.data.projects && post.data.projects.length > 0 && (
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mt-3">
+            <span class="mono-label">Projects</span>
+            {post.data.projects.map((project: string) => (
+              <a href={`/projects#${project}`} class="mono-label hover:text-slate-dark no-underline">
+                {projectLabels[project] ?? project}
+              </a>
+            ))}
+          </div>
+        )}
+      </header>
 
       <div class={contentWrapperClass}>
         <div class={contentColumnClass}>
-          <!-- Post Content -->
-          <div class="prose prose-invert max-w-none" data-article-body>
+          <div class="prose max-w-none" data-article-body>
             <Content />
           </div>
         </div>
@@ -94,10 +87,9 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
         )}
       </div>
 
-      <!-- Back Link -->
-      <div class="mt-12 pt-6 border-t border-border">
-        <a href="/posts" class="text-accent hover:text-accent-bright text-sm font-mono">
-          ← back
+      <div class="mt-16 pt-8 border-t border-slate-dark">
+        <a href="/posts" class="mono-label hover:text-slate-dark">
+          ← Back to index
         </a>
       </div>
     </div>
@@ -107,27 +99,24 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const codeBlocks = document.querySelectorAll('.prose pre');
-    
+
     codeBlocks.forEach((pre) => {
-      // Create wrapper
       const wrapper = document.createElement('div');
       wrapper.className = 'code-block-wrapper';
       pre.parentNode?.insertBefore(wrapper, pre);
       wrapper.appendChild(pre);
-      
-      // Create toggle button
+
       const button = document.createElement('button');
       button.className = 'code-toggle';
-      button.innerHTML = '▼ code';
+      button.innerHTML = 'CODE ▼';
       button.setAttribute('aria-expanded', 'true');
-      
+
       wrapper.insertBefore(button, pre);
-      
-      // Toggle functionality
+
       button.addEventListener('click', () => {
         const isCollapsed = pre.classList.toggle('collapsed');
         button.setAttribute('aria-expanded', (!isCollapsed).toString());
-        button.innerHTML = isCollapsed ? '▶ code' : '▼ code';
+        button.innerHTML = isCollapsed ? 'CODE ▶' : 'CODE ▼';
       });
     });
   });
@@ -135,77 +124,212 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
 
 <style>
   .prose {
-    @apply text-text-primary;
+    color: var(--color-slate-dark);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
+    max-width: 68ch;
   }
 
   .prose :global(h1) {
-    @apply text-2xl font-mono font-bold text-text-primary mt-8 mb-4 tracking-tight;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--color-slate-dark);
+    margin: 2.5rem 0 1rem;
   }
 
   .prose :global(h2) {
-    @apply text-xl font-mono font-bold text-text-primary mt-6 mb-3 tracking-tight;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--color-slate-dark);
+    margin: 2.25rem 0 0.85rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-slate-dark);
   }
 
   .prose :global(h3) {
-    @apply text-lg font-mono font-bold text-text-primary mt-5 mb-2 tracking-tight;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--color-slate-dark);
+    margin: 1.75rem 0 0.65rem;
+  }
+
+  .prose :global(h4) {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--color-slate-dark);
+    margin: 1.4rem 0 0.5rem;
   }
 
   .prose :global(p) {
-    @apply text-text-primary mb-4 leading-relaxed text-sm font-mono;
+    color: var(--color-slate-dark);
+    margin: 0 0 1.1rem;
   }
 
   .prose :global(a) {
-    @apply text-accent no-underline hover:text-accent-bright;
+    color: var(--color-slate-dark);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+  }
+
+  .prose :global(a:hover) {
+    text-decoration-thickness: 2px;
+    opacity: 1;
   }
 
   .prose :global(strong) {
-    @apply text-text-primary font-bold;
+    color: var(--color-slate-dark);
+    font-weight: 700;
+  }
+
+  .prose :global(em) {
+    font-style: italic;
   }
 
   .prose :global(code) {
-    @apply font-mono text-xs;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
   }
 
   .prose :global(:not(pre) > code) {
-    @apply bg-surface px-1.5 py-0.5 rounded text-accent;
+    background-color: var(--color-ivory-medium);
+    padding: 0.1em 0.35em;
+    border: 1px solid var(--color-cloud-light);
+    color: var(--color-slate-dark);
   }
 
   .prose :global(pre) {
-    @apply bg-surface p-3 rounded overflow-x-auto mb-4 border border-border text-xs;
+    background-color: var(--color-ivory-medium);
+    color: var(--color-slate-dark);
+    border: 1px solid var(--color-slate-dark);
+    border-radius: 0;
+    padding: 1.1rem 1.25rem;
+    overflow-x: auto;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
   }
 
   .prose :global(pre code) {
-    @apply bg-transparent p-0;
+    background: transparent;
+    padding: 0;
+    border: 0;
   }
 
-  .prose :global(ul), .prose :global(ol) {
-    @apply mb-4 ml-6 text-sm font-mono;
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1.1rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose :global(ul) {
+    list-style-type: none;
+  }
+
+  .prose :global(ul > li) {
+    position: relative;
+  }
+
+  .prose :global(ul > li::before) {
+    content: '—';
+    position: absolute;
+    left: -1.5rem;
+    color: var(--color-cloud-dark);
+  }
+
+  .prose :global(ol) {
+    list-style-type: decimal;
   }
 
   .prose :global(li) {
-    @apply mb-2 text-text-primary;
+    margin-bottom: 0.4rem;
+    color: var(--color-slate-dark);
   }
 
   .prose :global(blockquote) {
-    @apply border-l-2 border-accent pl-4 py-1 text-text-secondary italic my-4 text-sm;
+    border-left: 2px solid var(--color-slate-dark);
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    color: var(--color-slate-light);
+    font-style: italic;
+    margin: 1.5rem 0;
   }
 
-  /* Code folding styles */
+  .prose :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--color-slate-dark);
+    margin: 2.5rem 0;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 15px;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    border-bottom: 1px solid var(--color-cloud-light);
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+  }
+
+  .prose :global(th) {
+    border-bottom-color: var(--color-slate-dark);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-cloud-dark);
+    font-weight: 400;
+  }
+
+  /* Code folding */
   :global(.code-block-wrapper) {
-    @apply mb-4 relative;
+    margin: 1.25rem 0;
+    position: relative;
   }
 
   :global(.code-toggle) {
-    @apply w-full text-left px-3 py-1.5 text-xs font-mono text-text-secondary 
-           bg-surface border border-border rounded-t hover:text-accent 
-           transition-colors cursor-pointer;
+    width: 100%;
+    text-align: left;
+    padding: 0.55rem 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-cloud-dark);
+    background-color: var(--color-ivory-medium);
+    border: 1px solid var(--color-slate-dark);
+    border-bottom: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+
+  :global(.code-toggle:hover) {
+    color: var(--color-slate-dark);
   }
 
   :global(.code-toggle + pre) {
-    @apply rounded-t-none mt-0 transition-all duration-300;
+    margin-top: 0;
   }
 
   :global(pre.collapsed) {
-    @apply max-h-0 overflow-hidden !p-0 !border-0 !mb-0;
+    max-height: 0;
+    overflow: hidden;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border-width: 0 !important;
   }
 </style>
