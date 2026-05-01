@@ -1,21 +1,26 @@
 ---
-import ThemeCustomizer from './ThemeCustomizer';
-import ThemeToggle from './ThemeToggle.astro';
-
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
-  { name: 'home', href: '/' },
-  { name: 'projects', href: '/projects' },
-  { name: 'posts', href: '/posts' },
-  { name: 'tags', href: '/tags' },
-  { name: 'about', href: '/about' },
+  { name: 'Home', href: '/' },
+  { name: 'Projects', href: '/projects' },
+  { name: 'Posts', href: '/posts' },
+  { name: 'Tags', href: '/tags' },
+  { name: 'About', href: '/about' },
 ];
 ---
 
-<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-200 border-b border-transparent">
-  <div class="max-w-6xl mx-auto px-6 md:px-12 py-4 flex justify-end items-center gap-4">
-    <nav class="flex gap-6">
+<header
+  id="header"
+  class="sticky top-0 left-0 right-0 z-50 bg-ivory-medium border-b border-transparent transition-colors duration-150"
+>
+  <div class="max-w-[1200px] mx-auto px-6 md:px-10 h-[68px] flex items-center justify-between gap-6">
+    <a href="/" class="flex items-baseline gap-2 hover:opacity-100" aria-label="Cluttered Cabinet home">
+      <span class="font-sans font-bold text-[16px] tracking-tight2 text-slate-dark">CLUTTERED CABINET</span>
+      <span class="font-mono text-[12px] tracking-wide2 uppercase text-cloud-dark hidden sm:inline">v2</span>
+    </a>
+
+    <nav class="flex items-center gap-1 sm:gap-2">
       {navLinks.map(link => {
         const isActive = link.href === '/'
           ? currentPath === '/'
@@ -24,35 +29,47 @@ const navLinks = [
         return (
           <a
             href={link.href}
-            class={`group relative font-mono text-sm text-text-secondary hover:text-accent transition-all duration-200 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-200 ${
-              isActive ? 'text-accent after:scale-x-100' : 'group-hover:after:scale-x-100'
-            }`}
+            class={`nav-link ${isActive ? 'is-active' : ''}`}
           >
             {link.name}
           </a>
         );
       })}
     </nav>
-    <div class="flex gap-3 items-center">
-      <ThemeToggle />
-      <ThemeCustomizer client:load />
-    </div>
   </div>
 </header>
 
 <style>
+  .nav-link {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--color-slate-dark);
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: 0;
+    line-height: 1;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .nav-link:hover {
+    border-color: var(--color-slate-dark);
+    opacity: 1;
+  }
+
+  .nav-link.is-active {
+    border-color: var(--color-slate-dark);
+  }
+
   #header.scrolled {
-    background-color: color-mix(in srgb, var(--bg) 95%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom-color: var(--border);
+    border-bottom-color: var(--color-slate-dark);
   }
 </style>
 
 <script>
   const header = document.getElementById('header');
-
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
+    if (window.scrollY > 8) {
       header?.classList.add('scrolled');
     } else {
       header?.classList.remove('scrolled');

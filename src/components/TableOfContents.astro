@@ -3,7 +3,7 @@ export interface Props {
   heading?: string;
 }
 
-const { heading = "Table of Contents" } = Astro.props as Props;
+const { heading = "Contents" } = Astro.props as Props;
 ---
 
 <div class="toc-wrapper">
@@ -160,12 +160,14 @@ const { heading = "Table of Contents" } = Astro.props as Props;
   }
 
   .toc-title {
-    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+    font-family: var(--font-mono);
     text-transform: uppercase;
-    letter-spacing: 0.3em;
-    font-size: 0.65rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.75rem;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    color: var(--color-cloud-dark);
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--color-slate-dark);
   }
 
   .toc-list {
@@ -175,41 +177,44 @@ const { heading = "Table of Contents" } = Astro.props as Props;
   }
 
   .toc-item {
-    margin: 0.25rem 0;
+    margin: 0;
   }
 
   .toc-link {
-    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
-    font-size: 0.78rem;
-    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--color-slate-light);
     text-decoration: none;
     display: block;
-    padding: 0.2rem 0;
-    border-radius: 4px;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    padding: 0.35rem 0;
+    transition: color 0.15s ease;
   }
 
   .toc-link:hover {
-    color: var(--accent-color);
+    color: var(--color-slate-dark);
+    opacity: 1;
   }
 
   .toc-link.active {
-    color: var(--accent-color);
+    color: var(--color-slate-dark);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .toc-link.level-3 {
-    padding-left: 0.8rem;
+    padding-left: 0.85rem;
+    font-size: 13px;
   }
 
   .toc-link.level-4 {
-    padding-left: 1.6rem;
-    font-size: 0.72rem;
+    padding-left: 1.7rem;
+    font-size: 12px;
   }
 
   .toc-mobile {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background-color: var(--surface);
+    border: 1px solid var(--color-slate-dark);
+    background-color: var(--color-ivory-medium);
     overflow: hidden;
   }
 
@@ -223,10 +228,12 @@ const { heading = "Table of Contents" } = Astro.props as Props;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 0.85rem;
-    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    padding: 0.85rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-cloud-dark);
   }
 
   .toc-mobile summary::-webkit-details-marker {
@@ -244,7 +251,7 @@ const { heading = "Table of Contents" } = Astro.props as Props;
   }
 
   .toc-mobile [data-toc-list-mobile] {
-    padding: 0.5rem 0.85rem 0.85rem;
+    padding: 0.25rem 1rem 0.85rem;
   }
 
   @media (min-width: 1024px) {
@@ -252,9 +259,6 @@ const { heading = "Table of Contents" } = Astro.props as Props;
       display: block;
       position: sticky;
       top: 6.5rem;
-      border-left: 1px solid var(--border);
-      padding-left: 1rem;
-      padding-right: 0.5rem;
       max-height: calc(100vh - 7rem);
       overflow-y: auto;
     }
