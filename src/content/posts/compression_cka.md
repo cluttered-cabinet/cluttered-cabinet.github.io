@@ -33,7 +33,7 @@ X = image - mean
 U, S, Vt = np.linalg.svd(X, full_matrices=False)
 ```
 
-$X = U \Sigma V^T$ decomposes the image into orthogonal basis patterns (columns of $V$) and their strengths ($S$).
+$X = U \Sigma V^T$ decomposes the image into orthogonal basis patterns (columns of $V$) and their strengths ($S$).[^cite-svd]
 
 ## Reconstruction Function
 
@@ -43,7 +43,7 @@ def reconstruct(k):
     return np.clip(U[:, :k] @ np.diag(S[:k]) @ Vt[:k, :] + mean, 0, 1)
 ```
 
-When reconstruction happens, I want to only keep the top-k singular values. That allows me to reconstruct an *approximation* of $X$, which I can just call $X_{k}$. 
+When reconstruction happens, I want to only keep the top-k singular values. That allows me to reconstruct an *approximation* of $X$, which I can just call $X_{k}$.[^note-eckart] 
 
 Smaller $k \implies $ stronger compression
 
@@ -89,7 +89,7 @@ plt.show()
     
 
 
-Useful b/c you can see the top number of components accounting for more of the cumulative explained variance.
+Useful b/c you can see the top number of components accounting for more of the cumulative explained variance.[^mn-evr]
 
 ## Structural Similarity - CKA
 
@@ -117,4 +117,14 @@ plt.show()
     
 
 
-CKA quantifies the structure preservation, which is what I care about at the moment. Remains high as long as the major patterns are present, fine detail isn't important at the moment.
+CKA quantifies the structure preservation,[^cite-cka] which is what I care about at the moment. Remains high as long as the major patterns are present, fine detail isn't important at the moment.[^mn-fine-detail]
+
+[^cite-svd]: The singular value decomposition factors any matrix into orthogonal left/right bases scaled by singular values. Its modern numerical form traces to Golub & Reinsch, *Singular Value Decomposition and Least Squares Solutions* (1970).
+
+[^note-eckart]: That this truncated reconstruction is the *best* possible rank-$k$ approximation (in Frobenius and spectral norm) is the Eckart–Young–Mirsky theorem (1936).
+
+[^mn-evr]: The cumulative explained variance ratio is just $\sum_{i \le k} S_i^2 / \sum_i S_i^2$ — the fraction of total variance captured by the first $k$ components.
+
+[^cite-cka]: CKA = Centered Kernel Alignment, introduced by Kornblith et al., *Similarity of Neural Network Representations Revisited* (2019). The linear variant used here compares the Gram matrices of two representations.
+
+[^mn-fine-detail]: For image compression this is a feature, not a bug: low-frequency structure dominates perception, and the high-rank components mostly encode noise and texture.

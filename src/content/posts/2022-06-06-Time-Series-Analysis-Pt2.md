@@ -21,7 +21,7 @@ df = df.set_index("Month")
 
 # Decomposition
 
-Time series can be thought of as made up of in a few components. Specifically: 
+Time series can be thought of as made up of in a few components.[^fpp2-decomp] Specifically: 
 
 - $S_{t}$: Seasonal component
 - $T_{t}$: Trend component
@@ -89,13 +89,13 @@ plt.show()
 
 ## Multiplicative Decomposition
 
-Multiplicative decomposition is the same as additive (in a way) but with multiplication. I know, shocking. Ridiculously shocking. 
+Multiplicative decomposition is the same as additive (in a way) but with multiplication.[^mn-log] I know, shocking. Ridiculously shocking. 
 
 $$
 y_{t} = S_t * T_t * R_t
 $$
 
-There's one thing to note that actually is interesting. There's an increase in the variance from what we see as "trend". 
+There's one thing to note that actually is interesting. There's an increase in the variance from what we see as "trend".[^mn-variance] 
 
 
 ```python
@@ -116,7 +116,7 @@ plt.show()
     
 
 
-Keep in mind the components are exactly the same as previously.
+Keep in mind the components are exactly the same as previously. Below I switch over to `STL`[^stl] on a real dataset of airline passengers.
 
 
 ```python
@@ -139,3 +139,11 @@ fig = res.plot()
 
     
 ![png](/2022-06-06-Time-Series-Analysis-Pt2_files/2022-06-06-Time-Series-Analysis-Pt2_11_0.png)
+
+[^fpp2-decomp]: This breakdown follows the time series decomposition chapter of Hyndman & Athanasopoulos, *Forecasting: Principles and Practice*.
+
+[^mn-variance]: This widening spread is the telltale sign that a series is multiplicative rather than additive.
+
+[^mn-log]: Equivalently, taking the log of a multiplicative series turns it back into an additive one, since $\log(S_t T_t R_t) = \log S_t + \log T_t + \log R_t$.
+
+[^stl]: STL stands for "Seasonal-Trend decomposition using Loess," a robust method introduced by Cleveland et al. (1990). It's the `statsmodels` implementation used here.

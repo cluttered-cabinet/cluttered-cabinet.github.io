@@ -13,7 +13,7 @@ import tensorflow as tf
 
 # Creating a tensor
 
-You should always assign the `dtype` when creating a tensor.
+You should always assign the `dtype` when creating a tensor.[^mn-dtype]
 
 
 ```python
@@ -116,7 +116,7 @@ print(tf.ones(shape=(3, 4)))
      [1. 1. 1. 1.]], shape=(3, 4), dtype=float32)
 
 
-Keep in mind you can change a lot of parameters w.r.t. $\mu, \sigma, $ etc. since this is a random normal distribution. There are more distributions as well if need be.
+Keep in mind you can change a lot of parameters w.r.t. $\mu, \sigma, $ etc. since this is a random normal distribution.[^mn-distributions] There are more distributions as well if need be.
 
 
 ```python
@@ -255,7 +255,7 @@ tf.tensordot(tf.constant([1, 2, 3]), tf.constant([8, 8, 8]), axes=1)
 
 ## Broadcasting
 
-Look at the explanation [NumPy provides](https://numpy.org/doc/stable/user/basics.broadcasting.html)
+Look at the explanation [NumPy provides](https://numpy.org/doc/stable/user/basics.broadcasting.html)[^broadcasting]
 
 
 ```python
@@ -282,3 +282,9 @@ print(tf.math.add(x, y).numpy())
     [[ 0  2  4  6]
      [ 4  6  8 10]
      [ 8 10 12 14]]
+
+[^mn-dtype]: Being explicit about `dtype` avoids surprises: TensorFlow defaults to `float32` for floats and `int32` for integers, which won't always be what you want.
+
+[^mn-distributions]: TensorFlow also offers `tf.random.uniform`, `tf.random.poisson`, and others under `tf.random`.
+
+[^broadcasting]: Broadcasting in TensorFlow follows the same rules as NumPy: dimensions are aligned from the right and stretched where one of them is 1.

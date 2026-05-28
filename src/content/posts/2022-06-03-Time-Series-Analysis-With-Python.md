@@ -4,7 +4,7 @@ description: It's been a while since I've brushed up on my time series forecasti
 date: "2022-06-03"
 tags: [jupyter, python, timeseries]
 ---
-A couple years ago, I started learning how time series analysis works. It was so very interesting, but I didn't really have time after a few months to dive into it properly. That's what I'll be doing now. Before I get started, note that I'll be following Rob Hydman's excellent book [Forecasting: Principles and Practice](https://otexts.com/fpp2/). This is an attempt to refresh my own memory, and recreate the methods in the book with Python.
+A couple years ago, I started learning how time series analysis works. It was so very interesting, but I didn't really have time after a few months to dive into it properly. That's what I'll be doing now. Before I get started, note that I'll be following Rob Hydman's excellent book [Forecasting: Principles and Practice](https://otexts.com/fpp2/).[^fpp2] This is an attempt to refresh my own memory, and recreate the methods in the book with Python.
 
 # Simple Methods
 
@@ -26,7 +26,7 @@ $$
 
 > Tip: Keep in mind that you'll see something like this $\hat{y}_{T+1 | T}$ which simply means "the predicted value of $y$ at time step $T+1$ given all the previous $T$ timesteps"
 
-In R, you can use `meanf`. In Python (at least with the statsmodels library from what I've seen) we don't have that. So we're going to take a sample dataset of Electrical Equipment Manufacturing as a sample dataset and implement it: 
+In R, you can use `meanf`.[^mn-meanf] In Python (at least with the statsmodels library from what I've seen) we don't have that. So we're going to take a sample dataset of Electrical Equipment Manufacturing as a sample dataset and implement it: 
 
 
 ```python
@@ -56,7 +56,7 @@ plt.show()
     
 
 
-Now I'll be honest, I created my own **very simple** version of this for Pandas dataframes. This is not something I'd suggest using for anything other than learning: 
+Now I'll be honest, I created my own **very simple** version of this for Pandas dataframes.[^mn-toy] This is not something I'd suggest using for anything other than learning: 
 
 
 ```python
@@ -145,7 +145,7 @@ $$
 
 ## Seasonal Naive 
 
-A bit more interesting is the seasonal naive method, which doesn't take the last value, but the last value of the previous season. A good example of this may be when measuring consumption of electricity, which we know is cyclic (see above). In that case, you may expect the energy consumption today to be similar to the energy consumption last year. In this case, we introduce a new variable, $m$ which is the seasonal period. We can also replace the `1` we've been using (as a way to indicate we want to the forecast for the next time step) with $h$, making it more general. So we can define this as: 
+A bit more interesting is the seasonal naive method,[^mn-snaive] which doesn't take the last value, but the last value of the previous season. A good example of this may be when measuring consumption of electricity, which we know is cyclic (see above). In that case, you may expect the energy consumption today to be similar to the energy consumption last year. In this case, we introduce a new variable, $m$ which is the seasonal period.[^seasonal-period] We can also replace the `1` we've been using (as a way to indicate we want to the forecast for the next time step) with $h$, making it more general. So we can define this as: 
 
 $$
 \hat{y}_{T+h | T} = y_{T + h - m(k+1)}
@@ -154,3 +154,13 @@ $$
 Where $k$ is the integer part of $(h-1)/m$
 
 Now I've got to get going, but my post tomorrow will keep going down this road.
+
+[^fpp2]: Rob J. Hyndman & George Athanasopoulos, *Forecasting: Principles and Practice* (2nd ed.), freely available at [otexts.com/fpp2](https://otexts.com/fpp2/). The canonical modern reference for applied forecasting.
+
+[^mn-meanf]: `meanf` is part of R's `forecast` package, also by Hyndman.
+
+[^mn-snaive]: This is what R's `forecast` package calls `snaive`.
+
+[^seasonal-period]: For monthly data with yearly seasonality, $m = 12$; for quarterly data, $m = 4$; for daily data with weekly seasonality, $m = 7$.
+
+[^mn-toy]: It's a teaching reimplementation, not optimized or edge-case-hardened.

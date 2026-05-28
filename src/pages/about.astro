@@ -3,43 +3,43 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="About — Cluttered Cabinet">
-  <section class="max-w-[1200px] mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-20">
-    <div class="border-b border-slate-dark pb-8 mb-12">
-      <p class="mono-label mb-4">About</p>
-      <h1 class="font-serif text-[44px] md:text-[60px] leading-[1.05] tracking-tight2 text-slate-dark">
+  <section class="max-w-[1080px] mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-20">
+    <div class="border-b border-cloud-light pb-8 mb-12">
+      <p class="mono-label mb-3">About</p>
+      <h1 class="font-serif font-normal text-[40px] md:text-[56px] leading-[1.05] text-slate-dark">
         Darpan Ganatra
       </h1>
     </div>
 
     <div class="grid gap-12 lg:grid-cols-[2fr_1fr] lg:items-start">
-      <div class="space-y-6 max-w-2xl">
-        <p class="font-sans text-slate-dark text-[18px] md:text-[20px] leading-[1.5]">
+      <div class="space-y-6 max-w-2xl about-prose">
+        <p class="lede">
           VP of Machine Learning &amp; Generative AI at <span class="emph">Publicis Health</span>, where I lead a team building production agentic systems — clinical reasoning agents, multi-agent orchestrators, analytics agents — deployed across 20+ pharmaceutical brands.
         </p>
 
-        <p class="font-sans text-slate-dark text-[16px] leading-[1.5]">
+        <p>
           Before Publicis I built ML pipelines on Vertex AI at Amyris (biotech), and led data science teams at NBCUniversal and WWE.
         </p>
 
-        <p class="font-sans text-slate-dark text-[16px] leading-[1.5]">
+        <p>
           Outside production work I'm running two independent research threads: <span class="emph">LUMEN</span> (token-free agent dialogue via compressed transformer states) and <span class="emph">representation engineering</span> for controllable LLM personas (targeting NeurIPS).
         </p>
 
-        <p class="font-sans text-slate-dark text-[16px] leading-[1.5]">
+        <p>
           This site gathers experiment logs, architecture notes, and dead ends.
         </p>
       </div>
 
-      <aside class="border-t border-slate-dark pt-6 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0">
+      <aside class="border-t border-cloud-light pt-6 lg:border-t-0 lg:border-l lg:border-cloud-light lg:pl-8 lg:pt-0">
         <p class="mono-label mb-4">Elsewhere</p>
         <ul class="flex flex-col gap-3">
           <li>
-            <a href="https://www.linkedin.com/in/darpanganatra/" target="_blank" rel="noopener noreferrer" class="font-sans text-[16px] text-slate-dark hover:underline underline-offset-4">
+            <a href="https://www.linkedin.com/in/darpanganatra/" target="_blank" rel="noopener noreferrer" class="elsewhere-link">
               LinkedIn →
             </a>
           </li>
           <li>
-            <a href="https://github.com/cluttered-cabinet" target="_blank" rel="noopener noreferrer" class="font-sans text-[16px] text-slate-dark hover:underline underline-offset-4">
+            <a href="https://github.com/cluttered-cabinet" target="_blank" rel="noopener noreferrer" class="elsewhere-link">
               GitHub →
             </a>
           </li>
@@ -47,4 +47,27 @@ import Layout from '../layouts/Layout.astro';
       </aside>
     </div>
   </section>
+
+  <style>
+    .about-prose p {
+      font-family: var(--font-serif);
+      color: var(--ink);
+      font-size: 1.4rem;
+      line-height: 1.6;
+    }
+
+    .about-prose .lede {
+      font-size: 1.8rem;
+      line-height: 1.45;
+    }
+
+    .elsewhere-link {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.35rem;
+      color: var(--ink);
+    }
+
+    .elsewhere-link:hover { opacity: 0.6; }
+  </style>
 </Layout>

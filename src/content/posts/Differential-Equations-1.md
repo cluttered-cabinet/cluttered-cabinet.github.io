@@ -5,7 +5,7 @@ date: "2022-05-19"
 tags: [jupyter, python, modelling, comp_bio]
 ---
 # Introduction
-I've long been interested in modelling biological systems with mathematics. This is going to be a series which goes over how to do that (for simple systems of course). 
+I've long been interested in modelling biological systems with mathematics.[^mn-biomath] This is going to be a series which goes over how to do that (for simple systems of course). 
 
 # Single Differential Equation (Decay)
 
@@ -46,7 +46,7 @@ plt.style.use('seaborn')
 plt.rcParams.update({'font.size': 12})
 ```
 
-First thing we need to work through is how to define the model. We'll be using `solve_ivp` rather than `odeint` from the `scipy.integrate` library. Why? Because `odeint` is now outdated. I'll provide a reference to this later. 
+First thing we need to work through is how to define the model. We'll be using `solve_ivp` rather than `odeint` from the `scipy.integrate` library.[^solve-ivp] Why? Because `odeint` is now outdated. I'll provide a reference to this later. 
 
 In the case of `solve_ivp`, we need to create our model with three things: 
 
@@ -70,7 +70,7 @@ Now that we have our model created, we can feed it into `solve_ivp`. To do this,
 
 1. `t_span`: The time over which we want to evaluate
 2. `y0`: The initial value of our function
-3. `dense_output`: Whether we want our output to be smooth
+3. `dense_output`: Whether we want our output to be smooth[^mn-dense-output]
 
 Now there are many other options in `solve_ivp`, but for now we'll go over these, just so we can get familiar. 
 
@@ -105,4 +105,12 @@ plt.show()
     
 
 
-Now I realize, this was extremely exciting and you just can't wait for more. Don't worry, next time we'll implement an SIR model. And maybe mess with the populations a bit.
+Now I realize, this was extremely exciting and you just can't wait for more. Don't worry, next time we'll implement an SIR model.[^sir] And maybe mess with the populations a bit.
+
+[^mn-biomath]: This is the heart of mathematical and computational biology: using systems of equations to capture how quantities like populations, concentrations, or infections change over time.
+
+[^solve-ivp]: `solve_ivp` is the modern initial value problem solver in `scipy.integrate`, supporting multiple integration methods (e.g. `RK45`, `LSODA`) selectable via the `method` argument.
+
+[^mn-dense-output]: With `dense_output=True`, the solver returns a continuous interpolant accessible via `solution.sol`, so you can evaluate the solution at arbitrary times rather than only at the discrete steps the solver chose.
+
+[^sir]: The SIR model splits a population into Susceptible, Infected, and Recovered compartments, a classic epidemiological system of coupled ODEs.

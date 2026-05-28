@@ -20,79 +20,57 @@ const { Content } = await post.render();
 
 const formattedDate = post.data.date;
 const showTableOfContents = post.data.toc !== false;
-const contentWrapperClass = [
-  'flex flex-col gap-10',
-  showTableOfContents
-    ? 'lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-16'
-    : 'lg:max-w-3xl lg:mx-auto',
-].filter(Boolean).join(' ');
-const contentColumnClass = showTableOfContents
-  ? 'order-2 lg:order-1 min-w-0'
-  : 'min-w-0';
-const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
 ---
 
 <Layout title={`${post.data.title} — Cluttered Cabinet`} description={post.data.description || post.data.summary}>
-  <article class="px-6 md:px-10 pt-16 md:pt-24 pb-20">
-    <div class="mx-auto max-w-[1200px]">
-      <header class="mb-12 border-b border-slate-dark pb-8">
-        <div class="flex items-baseline gap-4 mb-6">
-          <span class="mono-label">Date</span>
-          <time class="mono-label" style="color: var(--color-slate-dark)">{formattedDate}</time>
-        </div>
+  <article class="tufte-page">
+    <header class="tufte-header">
+      <p class="mono-label">{formattedDate}</p>
 
-        <h1 class="font-serif text-[44px] md:text-[64px] lg:text-[76px] leading-[1.05] tracking-tight2 text-slate-dark mb-6 max-w-4xl">
-          {post.data.title}
-        </h1>
+      <h1 class="post-title">{post.data.title}</h1>
 
-        {post.data.summary && (
-          <p class="font-sans text-[18px] md:text-[20px] leading-[1.45] text-slate-dark max-w-3xl">
-            {post.data.summary}
-          </p>
-        )}
+      {post.data.summary && (
+        <p class="post-subtitle">{post.data.summary}</p>
+      )}
 
-        {post.data.tags && post.data.tags.length > 0 && (
-          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mt-8">
-            <span class="mono-label">Tags</span>
-            {post.data.tags.map((tag: string) => (
-              <a href={`/tags/${tag}`} class="mono-label hover:text-slate-dark no-underline">
-                {tag}
-              </a>
-            ))}
-          </div>
-        )}
+      {post.data.tags && post.data.tags.length > 0 && (
+        <p class="post-meta">
+          <span class="post-meta-label">Tags</span>
+          {post.data.tags.map((tag: string, i: number) => (
+            <>
+              {i > 0 && <span class="post-meta-sep">·</span>}
+              <a href={`/tags/${tag}`} class="post-meta-link">{tag}</a>
+            </>
+          ))}
+        </p>
+      )}
 
-        {post.data.projects && post.data.projects.length > 0 && (
-          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mt-3">
-            <span class="mono-label">Projects</span>
-            {post.data.projects.map((project: string) => (
-              <a href={`/projects#${project}`} class="mono-label hover:text-slate-dark no-underline">
-                {projectLabels[project] ?? project}
-              </a>
-            ))}
-          </div>
-        )}
-      </header>
+      {post.data.projects && post.data.projects.length > 0 && (
+        <p class="post-meta">
+          <span class="post-meta-label">Projects</span>
+          {post.data.projects.map((project: string, i: number) => (
+            <>
+              {i > 0 && <span class="post-meta-sep">·</span>}
+              <a href={`/projects#${project}`} class="post-meta-link">{projectLabels[project] ?? project}</a>
+            </>
+          ))}
+        </p>
+      )}
+    </header>
 
-      <div class={contentWrapperClass}>
-        <div class={contentColumnClass}>
-          <div class="prose max-w-none" data-article-body>
-            <Content />
-          </div>
-        </div>
-        {showTableOfContents && (
-          <div class={tocColumnClass}>
-            <TableOfContents />
-          </div>
-        )}
+    {showTableOfContents && (
+      <div class="post-toc">
+        <TableOfContents />
       </div>
+    )}
 
-      <div class="mt-16 pt-8 border-t border-slate-dark">
-        <a href="/posts" class="mono-label hover:text-slate-dark">
-          ← Back to index
-        </a>
-      </div>
+    <div class="prose" data-article-body>
+      <Content />
     </div>
+
+    <footer class="post-footer">
+      <a href="/posts" class="post-meta-link">← Back to index</a>
+    </footer>
   </article>
 </Layout>
 
@@ -108,7 +86,7 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
 
       const button = document.createElement('button');
       button.className = 'code-toggle';
-      button.innerHTML = 'CODE ▼';
+      button.innerHTML = 'Code ▼';
       button.setAttribute('aria-expanded', 'true');
 
       wrapper.insertBefore(button, pre);
@@ -116,80 +94,160 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
       button.addEventListener('click', () => {
         const isCollapsed = pre.classList.toggle('collapsed');
         button.setAttribute('aria-expanded', (!isCollapsed).toString());
-        button.innerHTML = isCollapsed ? 'CODE ▶' : 'CODE ▼';
+        button.innerHTML = isCollapsed ? 'Code ▶' : 'Code ▼';
       });
     });
   });
 </script>
 
 <style>
-  .prose {
-    color: var(--color-slate-dark);
-    font-family: var(--font-sans);
-    font-size: 17px;
-    line-height: 1.6;
-    max-width: 68ch;
+  /* Tufte page: wide canvas, content biased toward the left so the right
+     margin is free for sidenotes. */
+  .tufte-page {
+    width: 87.5%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 0 6rem;
+    padding-left: 12.5%;
   }
 
-  .prose :global(h1) {
+  .tufte-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .post-title {
     font-family: var(--font-serif);
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: var(--color-slate-dark);
-    margin: 2.5rem 0 1rem;
+    font-weight: 400;
+    font-size: 3.4rem;
+    line-height: 1.05;
+    margin: 0.6rem 0 0;
+    max-width: 90%;
   }
 
-  .prose :global(h2) {
+  .post-subtitle {
     font-family: var(--font-serif);
-    font-weight: 600;
-    font-size: 26px;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    color: var(--color-slate-dark);
-    margin: 2.25rem 0 0.85rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--color-slate-dark);
+    font-style: italic;
+    font-size: 1.7rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    margin: 1.4rem 0 0;
+    max-width: 70%;
   }
 
-  .prose :global(h3) {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 1.25;
-    letter-spacing: -0.02em;
-    color: var(--color-slate-dark);
-    margin: 1.75rem 0 0.65rem;
+  .post-meta {
+    margin: 1.4rem 0 0;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    color: var(--ink-muted);
   }
 
-  .prose :global(h4) {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 17px;
-    color: var(--color-slate-dark);
-    margin: 1.4rem 0 0.5rem;
+  .post-meta-label {
+    font-style: italic;
+    margin-right: 0.6rem;
   }
 
-  .prose :global(p) {
-    color: var(--color-slate-dark);
-    margin: 0 0 1.1rem;
+  .post-meta-sep {
+    margin: 0 0.45rem;
+    color: var(--rule);
   }
 
-  .prose :global(a) {
-    color: var(--color-slate-dark);
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-    text-decoration-thickness: 1px;
+  .post-meta-link {
+    color: var(--ink-muted);
+    text-decoration: none;
   }
 
-  .prose :global(a:hover) {
-    text-decoration-thickness: 2px;
+  .post-meta-link:hover {
+    color: var(--ink);
     opacity: 1;
   }
 
+  .post-toc {
+    width: 55%;
+    margin: 0 0 3rem;
+  }
+
+  .post-footer {
+    width: 55%;
+    margin-top: 4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ---- Article body --------------------------------------------------- */
+  .prose {
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    line-height: 1.7;
+  }
+
+  /* Running text and most blocks live in the 55% column; sidenotes float
+     into the remaining margin. */
+  .prose :global(p),
+  .prose :global(ol),
+  .prose :global(ul),
+  .prose :global(dl),
+  .prose :global(blockquote),
+  .prose :global(table),
+  .prose :global(h4),
+  .prose :global(h5),
+  .prose :global(h6) {
+    width: 55%;
+  }
+
+  .prose :global(h1),
+  .prose :global(h2),
+  .prose :global(h3) {
+    max-width: 80%;
+  }
+
+  .prose :global(h1) {
+    font-weight: 400;
+    font-size: 2.6rem;
+    line-height: 1.1;
+    margin: 3rem 0 1.4rem;
+  }
+
+  .prose :global(h2) {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 2.2rem;
+    line-height: 1.1;
+    margin: 2.6rem 0 1.2rem;
+  }
+
+  .prose :global(h3) {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.7rem;
+    line-height: 1.1;
+    margin: 2rem 0 1rem;
+  }
+
+  .prose :global(h4) {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.4rem;
+    margin: 1.6rem 0 0.8rem;
+  }
+
+  .prose :global(p) {
+    margin: 1.4rem 0;
+  }
+
+  .prose :global(a) {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 0.5px;
+    text-underline-offset: 0.15em;
+    text-decoration-color: var(--ink-muted);
+  }
+
+  .prose :global(a:hover) {
+    opacity: 0.6;
+  }
+
   .prose :global(strong) {
-    color: var(--color-slate-dark);
     font-weight: 700;
   }
 
@@ -199,26 +257,28 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
 
   .prose :global(code) {
     font-family: var(--font-mono);
-    font-size: 0.85em;
+    font-size: 0.92em;
   }
 
   .prose :global(:not(pre) > code) {
-    background-color: var(--color-ivory-medium);
-    padding: 0.1em 0.35em;
-    border: 1px solid var(--color-cloud-light);
-    color: var(--color-slate-dark);
+    background-color: var(--paper-shade);
+    padding: 0.05em 0.3em;
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    color: var(--ink);
   }
 
   .prose :global(pre) {
-    background-color: var(--color-ivory-medium);
-    color: var(--color-slate-dark);
-    border: 1px solid var(--color-slate-dark);
+    background-color: var(--paper-shade);
+    color: var(--ink);
+    border: 1px solid var(--rule);
     border-radius: 0;
-    padding: 1.1rem 1.25rem;
+    padding: 1rem 1.1rem;
     overflow-x: auto;
     margin: 0;
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    width: 55%;
   }
 
   .prose :global(pre code) {
@@ -229,96 +289,78 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
 
   .prose :global(ul),
   .prose :global(ol) {
-    margin: 0 0 1.1rem;
-    padding-left: 1.5rem;
-  }
-
-  .prose :global(ul) {
-    list-style-type: none;
-  }
-
-  .prose :global(ul > li) {
-    position: relative;
-  }
-
-  .prose :global(ul > li::before) {
-    content: '—';
-    position: absolute;
-    left: -1.5rem;
-    color: var(--color-cloud-dark);
-  }
-
-  .prose :global(ol) {
-    list-style-type: decimal;
+    padding-left: 1.6rem;
   }
 
   .prose :global(li) {
     margin-bottom: 0.4rem;
-    color: var(--color-slate-dark);
   }
 
   .prose :global(blockquote) {
-    border-left: 2px solid var(--color-slate-dark);
+    border-left: 2px solid var(--rule);
     padding: 0.25rem 0 0.25rem 1.25rem;
-    color: var(--color-slate-light);
+    color: var(--ink-soft);
     font-style: italic;
-    margin: 1.5rem 0;
+    margin: 1.6rem 0;
   }
 
   .prose :global(hr) {
     border: 0;
-    border-top: 1px solid var(--color-slate-dark);
-    margin: 2.5rem 0;
-  }
-
-  .prose :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-    font-size: 15px;
+    border-top: 1px solid var(--rule);
+    margin: 2.6rem 0;
+    width: 55%;
   }
 
   .prose :global(th),
   .prose :global(td) {
-    border-bottom: 1px solid var(--color-cloud-light);
-    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    padding: 0.5rem 0.75rem;
     text-align: left;
   }
 
   .prose :global(th) {
-    border-bottom-color: var(--color-slate-dark);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-cloud-dark);
+    border-bottom-color: var(--ink);
+    font-style: italic;
     font-weight: 400;
+    color: var(--ink-soft);
   }
 
-  /* Code folding */
+  /* Display math can exceed the column; let it scroll rather than overlap
+     the margin notes. */
+  .prose :global(.katex-display) {
+    width: 55%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  /* Code folding control */
   :global(.code-block-wrapper) {
-    margin: 1.25rem 0;
+    width: 55%;
+    margin: 1.4rem 0;
     position: relative;
+  }
+
+  :global(.code-block-wrapper pre) {
+    width: 100% !important;
   }
 
   :global(.code-toggle) {
     width: 100%;
     text-align: left;
-    padding: 0.55rem 0.85rem;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-cloud-dark);
-    background-color: var(--color-ivory-medium);
-    border: 1px solid var(--color-slate-dark);
+    padding: 0.45rem 0.8rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink-muted);
+    background-color: var(--paper-shade);
+    border: 1px solid var(--rule);
     border-bottom: none;
     cursor: pointer;
     transition: color 0.15s ease;
   }
 
   :global(.code-toggle:hover) {
-    color: var(--color-slate-dark);
+    color: var(--ink);
   }
 
   :global(.code-toggle + pre) {
@@ -331,5 +373,37 @@ const tocColumnClass = 'order-1 lg:order-2 lg:pl-4';
     padding-top: 0 !important;
     padding-bottom: 0 !important;
     border-width: 0 !important;
+  }
+
+  /* Sidenotes are authored at 55%-column width; on narrow screens the whole
+     page relaxes to a single column. */
+  @media (max-width: 760px) {
+    .tufte-page {
+      width: 90%;
+      padding-left: 0;
+    }
+
+    .post-title { max-width: 100%; font-size: 2.6rem; }
+    .post-subtitle { max-width: 100%; }
+    .post-toc,
+    .post-footer { width: 100%; }
+
+    .prose :global(p),
+    .prose :global(ol),
+    .prose :global(ul),
+    .prose :global(dl),
+    .prose :global(blockquote),
+    .prose :global(table),
+    .prose :global(pre),
+    .prose :global(hr),
+    .prose :global(h1),
+    .prose :global(h2),
+    .prose :global(h3),
+    .prose :global(h4),
+    .prose :global(.katex-display),
+    :global(.code-block-wrapper) {
+      width: 100%;
+      max-width: 100%;
+    }
   }
 </style>

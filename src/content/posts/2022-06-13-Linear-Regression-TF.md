@@ -4,7 +4,7 @@ description: Because honestly why not?
 date: "2022-06-13"
 tags: [jupyter, python, tensorflow, linear-regression]
 ---
-Alright, so this is going to be a quick, not very in depth approach to linear regression with TensorFlow. A lot of the functions I'm using for this that have to do with TensorFlow **will** be explained in a later post where I describe everything as simply as possible with examples. Bear with me here. One note is that I'm taking section 3.2 of the d2l.ai book and trying to make it simpler, so you may see code overlap, but hopefully this will be much more informative and easier to read (after some revisions).
+Alright, so this is going to be a quick, not very in depth approach to linear regression with TensorFlow. A lot of the functions I'm using for this that have to do with TensorFlow **will** be explained in a later post where I describe everything as simply as possible with examples. Bear with me here. One note is that I'm taking section 3.2 of the d2l.ai book[^d2l] and trying to make it simpler, so you may see code overlap, but hopefully this will be much more informative and easier to read (after some revisions).
 
 
 ```python
@@ -54,7 +54,7 @@ b_n
 \end{bmatrix}
 $$
 
-By the way... this isn't how you should usually look at linear regression. Usually you'd include $\bar{b}$ in $\underline{X}$ and $\bar{w}$, but to be more clear we'll seperate it here. 
+By the way... this isn't how you should usually look at linear regression. Usually you'd include $\bar{b}$ in $\underline{X}$ and $\bar{w}$, but to be more clear we'll seperate it here.[^mn-bias-trick] 
 
 Last thing to keep in mind is that we're adding noise (because otherwise it's not very fun!). That noise vector $\bar{\epsilon}$ will also have a shape of ($n$, 1), making our final equation: 
 
@@ -171,7 +171,7 @@ This section is going to cover a few things. Specifically
 
 Gradient descent is an optimization algorithm. The main point of it is to find the minimum or maximum of a particular surface which is defined by a differentiable function. The obvious question to the layman at this point is going to be: what the hell do any of those words mean Darpan? Fair enough. Let's get some examples going. 
 
-A simple example of a "differentiable" function is the function $f(x) = x^2$. Why is it differentiable? Because you can find the effect that changing the input will have on the out for all points (technically all points in the functions domain). That's pretty much it. Here's what I mean: 
+A simple example of a "differentiable" function is the function $f(x) = x^2$. Why is it differentiable? Because you can find the effect that changing the input will have on the out for all points (technically all points in the functions domain).[^mn-diff] That's pretty much it. Here's what I mean: 
 
 $$
 \dfrac{d}{dx} (x^2) = 2x
@@ -227,7 +227,7 @@ So the entire thing above says "I'm gonna measure the slope where I'm at, and go
 
 - $a_n$ is our current location (e.g. $x = 5$)
 - $\gamma$ is how large our steps are (e.g. should we go from 5 to 5.1 or from 5 to 5.01?)
-- $\nabla F(a_n)$ is the **gradient** (a derivative in multiple dimensions) at the place we're at (trying to figure out which way is an increasing slope and which way is a decreasing slope)
+- $\nabla F(a_n)$ is the **gradient** (a derivative in multiple dimensions) at the place we're at (trying to figure out which way is an increasing slope and which way is a decreasing slope)[^mn-gradient]
 
 In our case, the slope would be the error or loss between the predicted function and the actual values. 
 
@@ -235,7 +235,7 @@ There is a **lot** more to say about how exactly this works and why it matters s
 
 ### Batches 'n Stuff
 
-There is a small but great article [here](https://towardsdatascience.com/epoch-vs-iterations-vs-batch-size-4dfb9c7ce9c9) which explains it more thoroughly than I will at the moment. 
+There is a small but great article [here](https://towardsdatascience.com/epoch-vs-iterations-vs-batch-size-4dfb9c7ce9c9) which explains it more thoroughly than I will at the moment.[^batch-article] 
 
 Essentially batches are subsets of the dataset which you feed into the training loop. After one batch has been fed into the training loop, you use the results to update your model parameters. So if you have a dataset of size 100, you may take a batch size of 20, which would mean for each epoch, you'd have to update your parameters 5 times. You can refer to this as **minibatch** gradient descent. We'll be using a batch size of 10. Given that our dataset has the size of 1,000 we know the number of times the parameters are updated in one epoch is: 
 
@@ -298,3 +298,13 @@ for epoch in range(num_epochs):
 ```
 
 This is an abrupt stop, because I've got yet another thing I'd like to obsess about. Coming soon!
+
+[^d2l]: Aston Zhang, Zachary C. Lipton, Mu Li & Alexander J. Smola, *Dive into Deep Learning* ([d2l.ai](https://d2l.ai/)). Section 3.2 covers the from-scratch linear regression implementation referenced here.
+
+[^mn-bias-trick]: This "absorb the bias into the weights" trick appends a column of ones to $\underline{X}$ so $\bar{b}$ becomes just another weight.
+
+[^mn-diff]: More formally, the limit defining the derivative exists everywhere on the domain.
+
+[^mn-gradient]: For a function of one variable the gradient is simply the ordinary derivative; in higher dimensions it's the vector of partial derivatives.
+
+[^batch-article]: "Epoch vs Iterations vs Batch size" on Towards Data Science, which lays out the distinction between these three training hyperparameters.

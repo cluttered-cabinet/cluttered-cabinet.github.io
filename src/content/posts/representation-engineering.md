@@ -22,7 +22,7 @@ Prompting doesn't do this. I'll get to why I think it's worth proving that empir
 
 ### Where I Started: Linear Artificial Tomography
 
-The original intuition was: find the "health insurance" direction in activation space via PCA. This is basically what Zou et al. (2023) called **LAT** (Linear Artificial Tomography). Extract activations from paired stimuli, run PCA, and take the first principal component as your concept vector.
+The original intuition was: find the "health insurance" direction in activation space via PCA. This is basically what Zou et al. (2023) called **LAT** (Linear Artificial Tomography).[^zou2023] Extract activations from paired stimuli, run PCA, and take the first principal component as your concept vector.
 
 The appeal is obvious. PCA is mathematically clean, you get a basis for the concept subspace, and the first component *should* capture the direction of maximum variance between conditions. Here's what that looks like:
 
@@ -122,7 +122,7 @@ The $\lambda$ range I work with is $\{-3, -2, -1, -0.5, 0, 0.5, 1, 2, 3\}$. Nega
 
 ### The Asymmetry Problem
 
-Im & Li (ICLR 2025) give a theoretical account of why CAA/DiM is the most reliable steering method in idealized settings, and they discuss when that guarantee breaks down. My own reading of it (which I want to flag as a derivative interpretation, not something they state this way) is that the guarantee is about moving *negative* examples toward the positive distribution. If you're already in the positive region of activation space and you add more $\mathbf{v}_{\text{concept}}$, you're pushing into extrapolation territory. That matters for demographic simulation because some personas start in a different baseline region.
+Im & Li (ICLR 2025) give a theoretical account of why CAA/DiM is the most reliable steering method in idealized settings, and they discuss when that guarantee breaks down.[^imli] My own reading of it[^mn-derivative] is that the guarantee is about moving *negative* examples toward the positive distribution. If you're already in the positive region of activation space and you add more $\mathbf{v}_{\text{concept}}$, you're pushing into extrapolation territory. That matters for demographic simulation because some personas start in a different baseline region.
 
 I want to read the paper more carefully before leaning on this framing in a draft. If anyone reading this has a sharper take on it, I'm interested.
 
@@ -173,7 +173,7 @@ They're discriminative. Given labeled data, they tell you whether a concept is l
 
 The 2025 benchmarking literature consistently shows linear probes holding their own against SAE-based probes for classification tasks. When you have labeled pairs and a specific concept you want to locate, probes are the right tool.
 
-The "Are SAEs Useful?" paper (Kantamneni et al. 2025) made a sharper version of this point. SAE probes (using SAE feature activations as inputs to a linear classifier) underperform standard logistic regression baselines across a range of settings. Not by a massive margin, but consistently. If your goal is classification, the extra machinery of the SAE doesn't help.
+The "Are SAEs Useful?" paper (Kantamneni et al. 2025) made a sharper version of this point.[^kantamneni] SAE probes (using SAE feature activations as inputs to a linear classifier) underperform standard logistic regression baselines across a range of settings. Not by a massive margin, but consistently. If your goal is classification, the extra machinery of the SAE doesn't help.
 
 ### What SAEs Are Good At
 
@@ -197,7 +197,7 @@ Matryoshka SAEs have the best performance on this benchmark (their decoder direc
 
 The most interesting recent work tries to combine the two approaches.
 
-**SAE-SSV** (He et al., EMNLP 2025): use a linear probe to *select* which SAE features are relevant to a concept, then optimize the steering vector within that sparse subspace. Sample efficiency and directional clarity of probes, with the monosemanticity benefits of SAEs.
+**SAE-SSV** (He et al., EMNLP 2025): use a linear probe to *select* which SAE features are relevant to a concept, then optimize the steering vector within that sparse subspace.[^mn-saessv] Sample efficiency and directional clarity of probes, with the monosemanticity benefits of SAEs.
 
 **SDCV** (Denoising Concept Vectors with SAEs, 2025): use SAE features to clean concept vectors (probes or DiM). The intuition is that a concept vector mixes signal (the concept) with noise (correlated activations that co-vary with the concept but aren't causally relevant). SAE features can identify which components of the vector correspond to actual concept features vs. noise. The denoised vector also seems to generalize better across different starting points in activation space, which is relevant to the asymmetry discussion above.
 
@@ -322,3 +322,13 @@ What I'm still working out:
 7. Tighten causal claims. Either implement matched-pair controls or scope down what the termination/recovery tests actually prove.
 
 Framework and validation suite are in place. The rest is running experiments.
+
+[^zou2023]: Zou et al., *Representation Engineering: A Top-Down Approach to AI Transparency* (2023). The paper that named LAT and kicked off much of the recent steering literature.
+
+[^imli]: Im & Li, ICLR 2025. The theoretical guarantee holds in idealized settings; the interesting question is how far it degrades in practice.
+
+[^mn-derivative]: A derivative interpretation, not something the authors state this way — flagging it as mine.
+
+[^kantamneni]: Kantamneni et al., *Are Sparse Autoencoders Useful?* (2025). SAE probes consistently trail plain logistic regression on classification — not by much, but reliably.
+
+[^mn-saessv]: He et al., EMNLP 2025. Probe-selected sparse subspaces, then steer inside them.

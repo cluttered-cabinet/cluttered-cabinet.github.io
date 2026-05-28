@@ -19,11 +19,12 @@ const { title = 'Glossary', description } = Astro.props as Props;
 
 <style>
   .glossary {
-    border-top: 1px solid var(--color-slate-dark);
-    border-bottom: 1px solid var(--color-slate-dark);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
     padding: 1.75rem 0;
     background: transparent;
     margin: 2.5rem 0;
+    width: 55%;
   }
 
   .glossary-header {
@@ -34,19 +35,20 @@ const { title = 'Glossary', description } = Astro.props as Props;
   }
 
   .glossary-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-cloud-dark);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-muted);
     margin: 0;
   }
 
   .glossary-description {
     margin: 0;
-    font-family: var(--font-sans);
-    font-size: 15px;
-    color: var(--color-slate-light);
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    color: var(--ink-soft);
     line-height: 1.5;
   }
 
@@ -58,19 +60,20 @@ const { title = 'Glossary', description } = Astro.props as Props;
   }
 
   .glossary-list :global(dt) {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--color-cloud-dark);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.25rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-muted);
     margin: 0;
   }
 
   .glossary-list :global(dd) {
     margin: 0;
-    font-family: var(--font-sans);
-    font-size: 16px;
-    color: var(--color-slate-dark);
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    color: var(--ink);
     line-height: 1.5;
   }
 
@@ -83,6 +86,10 @@ const { title = 'Glossary', description } = Astro.props as Props;
   }
 
   @media (max-width: 768px) {
+    .glossary {
+      width: 100%;
+    }
+
     .glossary-list {
       display: block;
     }

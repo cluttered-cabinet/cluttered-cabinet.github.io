@@ -7,12 +7,12 @@ tags: ["llms", "agents"]
 draft: true
 ---
 - Get agent to run docker container, access it, then run a random forest model on some data.
-- Listened to a podcast once that said the biggest issue with a lot of agentic work is the lack of tools which have good interfaces for LLMs. So I should create good tools.
+- Listened to a podcast once that said the biggest issue with a lot of agentic work is the lack of tools which have good interfaces for LLMs.[^mn-interfaces] So I should create good tools.
 - Note: This is for my mac. It may work on Linux. Definitely (likely -- maybe) wont work on Windows. I don't plan to do anything with this code. So.
 
 # Structured Output
 
-There are better APIs, tools, etc. out there. I'm using ollama for now. I'll likely change it at a later date.
+There are better APIs, tools, etc. out there. I'm using ollama for now.[^mn-ollama] I'll likely change it at a later date.
 
 ```bash
 ollama 0.4.5
@@ -77,7 +77,7 @@ I guess information density is the biggest issue with a lot of these tools. Or c
 
 ### File System Tool
 
-If I were blind (and trained on a bunch of data), I'd probably want an interface to the filesystem which would return `JSON` or XML. Something which will allow me to always see the responses, even if they're empty. XML came to mind over `JSON` because Anthropic's models love 'em (or at least one of them does).
+If I were blind (and trained on a bunch of data), I'd probably want an interface to the filesystem which would return `JSON` or XML. Something which will allow me to always see the responses, even if they're empty. XML came to mind over `JSON` because Anthropic's models love 'em (or at least one of them does).[^mn-xml]
 
 ```XML
 <filesystem>
@@ -93,4 +93,10 @@ If I were blind (and trained on a bunch of data), I'd probably want an interface
 ```
 
 Fine, so I have a silly little function which will handle parsing the file system.
+
+[^mn-interfaces]: This echoes the broader "tools are the bottleneck" argument — model capability often matters less than whether the surrounding interfaces expose information in a way the model can actually use.
+
+[^mn-ollama]: Ollama is a local runtime for open-weight LLMs, handy for offline experimentation without API costs.
+
+[^mn-xml]: Anthropic's own prompting guidance recommends XML-style tags to delimit structured input, which is likely why the models respond well to them.
 
