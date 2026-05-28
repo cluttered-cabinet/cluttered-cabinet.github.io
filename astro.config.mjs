@@ -5,6 +5,7 @@ import tailwind from '@astrojs/tailwind';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkCallouts from './scripts/remark-callouts.mjs';
+import remarkSidenotes from './scripts/remark-sidenotes.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -24,7 +25,7 @@ export default defineConfig({
       defaultColor: false,
       wrap: false
     },
-    remarkPlugins: [remarkCallouts, remarkMath],
+    remarkPlugins: [remarkCallouts, remarkMath, remarkSidenotes],
     rehypePlugins: [rehypeKatex],
   },
 });

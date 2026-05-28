@@ -13,9 +13,9 @@ import GlossaryEntry from '../../components/GlossaryEntry.astro';
 
 ## What I'm Doing Here
 
-Large language models represent text internally as massive vectors (3072 dimensions for Llama-3.2-3B). If agents need to communicate efficiently (sending hidden states over a network or storing them compactly), I need compression. Specifically, I need to preserve the **semantic structure** that makes these representations useful.
+Large language models represent text internally as massive vectors (3072 dimensions for Llama-3.2-3B).[^mn-llama] If agents need to communicate efficiently (sending hidden states over a network or storing them compactly), I need compression. Specifically, I need to preserve the **semantic structure** that makes these representations useful.
 
-The approach: low-rank factorization. Instead of storing a full 3072-dim vector, I compress through a bottleneck:
+The approach: low-rank factorization.[^cite-lowrank] Instead of storing a full 3072-dim vector, I compress through a bottleneck:
 
 $$h \xrightarrow{U} z \xrightarrow{V} \hat{h}$$
 
@@ -43,7 +43,7 @@ For evaluation, I used three metrics:
 - **Cosine Similarity**: Do the directions match?
 - **CKA (Centered Kernel Alignment)**: Are the relationships between samples preserved?
 
-CKA is what I actually care about. It measures whether the compressed representations maintain the same structure between samples, separate from whether any individual vector is close to its original.
+CKA is what I actually care about.[^cite-cka] It measures whether the compressed representations maintain the same structure between samples, separate from whether any individual vector is close to its original.
 
 <Note variant="info" title="Why CKA?">
   <p>
@@ -73,7 +73,7 @@ Breaking down all the metrics:
 
 ![All Metrics](/posts/compressing_llm_hidden_states/fig2_all_metrics.png)
 
-All three metrics agree on the trend: higher rank = better reconstruction. But the absolute values differ significantly. MSE is harsh (even at rank 256, I have 0.20 error), while CKA is more forgiving (0.89 structure preservation).
+All three metrics agree on the trend: higher rank = better reconstruction. But the absolute values differ significantly. MSE is harsh (even at rank 256, I have 0.20 error), while CKA is more forgiving (0.89 structure preservation).[^mn-mse-scale]
 
 ---
 
@@ -91,7 +91,7 @@ A few theories:
 2. **Optimization got stuck**: Local minimum trapped the training
 3. **Architectural quirk**: Something about that specific rank
 
-The fact that rank 16 outperforms rank 32 suggests this is about the optimization landscape. I'd need to rerun rank 32 with different seeds to confirm, but there seems to be an instability in the middle compression regime.
+The fact that rank 16 outperforms rank 32 suggests this is about the optimization landscape.[^mn-nonmonotonic] I'd need to rerun rank 32 with different seeds to confirm, but there seems to be an instability in the middle compression regime.
 
 > [!warning]
 > Middle ranks are the sharpest part of the loss surface. A narrow bottleneck exaggerates variance from initialization, so re-running with multiple seeds (or better priors) is probably essential if you deploy at rank 32 to 64.
@@ -208,3 +208,13 @@ Three immediate directions:
     <p>The factor between the original hidden width and the rank of the bottleneck. Rank&nbsp;64 on a 3072-dim layer yields roughly 48x compression.</p>
   </GlossaryEntry>
 </Glossary>
+
+[^mn-llama]: Llama-3.2-3B is Meta's 3-billion-parameter model; its 3072-dim residual stream is the per-token hidden state I extract from.
+
+[^cite-lowrank]: Low-rank factorization is the same idea behind PCA and truncated SVD: approximate a wide matrix as the product of two thin ones. Here the maps are *learned* rather than derived analytically.
+
+[^cite-cka]: CKA = Centered Kernel Alignment, from Kornblith et al., *Similarity of Neural Network Representations Revisited* (2019). It compares the structure of two representation spaces rather than individual vectors.
+
+[^mn-mse-scale]: This is partly a scale artifact: MSE grows with the magnitude of the hidden states, while CKA is invariant to isotropic scaling, so they live on different and not-directly-comparable axes.
+
+[^mn-nonmonotonic]: A monotonic curve (more rank, more structure) is the expected behavior; a single point breaking the trend almost always points to training variance rather than something fundamental about that rank.

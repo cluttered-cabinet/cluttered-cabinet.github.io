@@ -14,9 +14,9 @@ $$
 p(\bar{X}) = \frac{e^{\beta_0 + \beta_1 X_1 + \dots + \beta_p X_p}}{1 + e^{\beta_0 + \beta_1 X_1 + \dots + \beta_p X_p}}
 $$
 
-Where we have $p(\bar{X})$ being the "real" function that defines the relationship between the features encoded in $\bar{X} = (X_{0}, X_{1}, \dots , X_{p})$, and the coefficients $\beta_{0}, \dots , \beta_{p}$ are the coefficients which are "learned" in the machine learning process. 
+Where we have $p(\bar{X})$ being the "real" function that defines the relationship between the features encoded in $\bar{X} = (X_{0}, X_{1}, \dots , X_{p})$, and the coefficients $\beta_{0}, \dots , \beta_{p}$ are the coefficients which are "learned" in the machine learning process.[^mn-logit] 
 
-Now any good statistics teacher will tell you that this isn't the extent of what you should learn about logistic regression. However, I'm no statistics teacher (nor do I currently have time to go through this), so what I'll say is that if you're reading this post you should also take a look at the book [Introduction to Statistical Learning](https://www.statlearning.com/) which has a great discussion on this topic in Chapter 4. I'd also recommend this for anyone at all trying to learn statistics.
+Now any good statistics teacher will tell you that this isn't the extent of what you should learn about logistic regression. However, I'm no statistics teacher (nor do I currently have time to go through this), so what I'll say is that if you're reading this post you should also take a look at the book [Introduction to Statistical Learning](https://www.statlearning.com/) which has a great discussion on this topic in Chapter 4.[^isl] I'd also recommend this for anyone at all trying to learn statistics.
 
 Great! Moving forward bravely to the next step, we're going to look at how to use this for a very contrived and annoying problem, which we're going to not only create ourselves, but we'll also solve ourselves. Why? Because that's the best way to learn, change my mind. So the basic idea is that we want to have certain features which will create a relatively binary output. We also want the target to rely on the features, in a binary fashion. That's simple enough: 
 
@@ -91,7 +91,7 @@ from sklearn.linear_model import LogisticRegression
 import pandas as pd
 ```
 
-One last time, let's take a look at our data, but in a different way this time. Lets look at it in 3D, so we can see the literal sigmoidal nature of our model: 
+One last time, let's take a look at our data, but in a different way this time. Lets look at it in 3D, so we can see the literal sigmoidal nature of our model:[^mn-sigmoid] 
 ```python
 fig = plt.figure(figsize=(14, 7))
 ax = plt.axes(projection="3d")
@@ -121,7 +121,7 @@ plt.show()
 
 Note the little section in the middle where we've added uncertainty. Everything else is relatively concrete in the output (we're keeping it simple).
 
-Next step that we want to put our data in a nice dataframe and use `LogisticRegression` from `sklearn.linear_model`. This has some defaults that we're going to use. Specifically, the "penalty" assigned to our training is the L2 norm. I'm going to make a post about the different types of penalty, but let's keep it moving for now. 
+Next step that we want to put our data in a nice dataframe and use `LogisticRegression` from `sklearn.linear_model`. This has some defaults that we're going to use. Specifically, the "penalty" assigned to our training is the L2 norm.[^l2] I'm going to make a post about the different types of penalty, but let's keep it moving for now. 
 ```python
 df = pd.DataFrame(
     {"x1": x_sample.ravel(), 
@@ -231,3 +231,11 @@ plt.show()
 
 
 That looks extremely similar to the idea we had when we created the data. So on that note, I'm going to leave the basics of logistic regression here. Next up we can take a closer look at prediction and accuracy of the model.
+
+[^isl]: Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani, *An Introduction to Statistical Learning* (Springer), freely available at [statlearning.com](https://www.statlearning.com/). Chapter 4 covers classification, including logistic regression.
+
+[^mn-logit]: Although the probability function looks nonlinear, taking the log-odds (the logit) of $p(\bar{X})$ recovers a plain linear combination $\beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$, which is why this is still called a *linear* model.
+
+[^mn-sigmoid]: The S-shaped sigmoid (logistic) curve squashes any real-valued input into the interval $(0, 1)$, which is exactly what lets us interpret the output as a probability.
+
+[^l2]: The L2 penalty (ridge regularization) adds a term proportional to the sum of squared coefficients to the loss, discouraging large weights. In scikit-learn this is the default for `LogisticRegression`.

@@ -31,38 +31,47 @@ const {
 </figure>
 
 <style>
+  /* Tufte figure: sits in the text column by default; `fullWidth` lets it
+     break out across the measure. Captions are set in the book face. */
   .image-block {
-    margin: 2.25rem 0;
-    text-align: center;
+    margin: 2rem 0;
+    max-width: 55%;
+  }
+
+  .image-block--full {
+    max-width: 90%;
   }
 
   .image-block img {
     width: 100%;
     max-width: 100%;
-    border: 1px solid var(--color-slate-dark);
+    border: 0;
     border-radius: 0;
     display: block;
   }
 
-  .image-block--full img {
-    width: 100%;
-  }
-
   figcaption {
-    margin-top: 0.75rem;
-    font-family: var(--font-mono);
-    font-size: 12px;
+    margin-top: 0.5rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1rem;
     line-height: 1.4;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-cloud-dark);
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-muted);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
-    justify-content: center;
+    gap: 0.5rem;
   }
 
   .image-credit {
     opacity: 0.7;
+  }
+
+  @media (max-width: 760px) {
+    .image-block,
+    .image-block--full {
+      max-width: 100%;
+    }
   }
 </style>

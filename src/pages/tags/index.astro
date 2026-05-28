@@ -16,13 +16,13 @@ const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => a[0].localeCom
 ---
 
 <Layout title="Tags — Cluttered Cabinet">
-  <section class="max-w-[1200px] mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-20">
-    <div class="border-b border-slate-dark pb-8 mb-0">
-      <p class="mono-label mb-4">Index</p>
-      <h1 class="font-serif text-[44px] md:text-[60px] leading-[1.05] tracking-tight2 text-slate-dark">
+  <section class="max-w-[1080px] mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-20">
+    <div class="border-b border-cloud-light pb-8 mb-0">
+      <p class="mono-label mb-3">Index</p>
+      <h1 class="font-serif font-normal text-[40px] md:text-[56px] leading-[1.05] text-slate-dark">
         Tags
       </h1>
-      <p class="mono-label mt-6">{sortedTags.length} total</p>
+      <p class="mono-label mt-5">{sortedTags.length} total</p>
     </div>
 
     {sortedTags.length > 0 ? (
@@ -30,7 +30,7 @@ const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => a[0].localeCom
         {sortedTags.map(([tag, count]) => (
           <a href={`/tags/${tag}`} class="row-link no-underline">
             <div class="flex items-baseline justify-between gap-6">
-              <span class="font-sans text-[18px] md:text-[20px] font-semibold text-slate-dark tracking-tight2">
+              <span class="font-serif text-[1.6rem] text-slate-dark">
                 {tag}
               </span>
               <span class="mono-label">
