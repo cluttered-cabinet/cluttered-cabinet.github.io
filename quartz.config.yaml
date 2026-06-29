@@ -129,11 +129,11 @@ plugins:
     layout:
       position: left
       priority: 50
-  - source: github:quartz-community/graph
-    enabled: true
-    layout:
-      position: right
-      priority: 10
+  # - source: github:quartz-community/graph
+  #   enabled: false
+  #   layout:
+  #     position: left
+  #     priority: 10
   - source: github:quartz-community/search
     enabled: true
     layout:
@@ -222,7 +222,7 @@ plugins:
         - tags
         - aliases
       excludedProperties: []
-      hidePropertiesView: false
+      hidePropertiesView: true
       delimiters: ---
       language: yaml
     order: 5

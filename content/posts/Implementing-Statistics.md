@@ -1,8 +1,13 @@
 ---
 title: Logistic Regression
 description: What the heck is logistic regression and how do you implement it?
-date: "2022-06-02"
-tags: [jupyter, python, sklearn, logistic_regression]
+date: 2022-06-02
+tags:
+  - jupyter
+  - python
+  - sklearn
+  - logistic_regression
+draft: true
 ---
 # What the heck is logistic regression and how do you implement it?
 

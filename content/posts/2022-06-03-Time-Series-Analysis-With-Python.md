@@ -1,8 +1,12 @@
 ---
 title: Time Series Analysis with Python
 description: It's been a while since I've brushed up on my time series forecasting techniques. Time to get on it (this is a work in progress).
-date: "2022-06-03"
-tags: [jupyter, python, timeseries]
+date: 2022-06-03
+tags:
+  - jupyter
+  - python
+  - timeseries
+draft: true
 ---
 A couple years ago, I started learning how time series analysis works. It was so very interesting, but I didn't really have time after a few months to dive into it properly. That's what I'll be doing now. Before I get started, note that I'll be following Rob Hydman's excellent book [Forecasting: Principles and Practice](https://otexts.com/fpp2/). This is an attempt to refresh my own memory, and recreate the methods in the book with Python.
 

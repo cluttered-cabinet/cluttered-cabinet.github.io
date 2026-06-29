@@ -1,10 +1,13 @@
 ---
 title: "Compressing LLM Hidden States: Finding the Sweet Spot"
-date: "2025-10-25"
-summary: "Turns out you can squeeze 3072-dimensional hidden states down by 24x while preserving most of their structure...kinda."
-description: "Turns out you can squeeze 3072-dimensional hidden states down by 24x while preserving most of their structure...kinda."
-tags: ["low-rank-factorization", "compression", "CKA"]
-draft: false
+date: 2025-10-25
+summary: Turns out you can squeeze 3072-dimensional hidden states down by 24x while preserving most of their structure...kinda.
+description: Turns out you can squeeze 3072-dimensional hidden states down by 24x while preserving most of their structure...kinda.
+tags:
+  - low-rank-factorization
+  - compression
+  - CKA
+draft: true
 ---
 
 ## What I'm Doing Here

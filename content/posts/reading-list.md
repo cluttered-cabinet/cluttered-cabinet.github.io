@@ -1,8 +1,11 @@
 ---
 title: Reading List
-date: "2026-06-29"
+date: 2026-06-29
 description: Papers and notes I keep coming back to.
-tags: ["meta", "reading"]
+tags:
+  - meta
+  - reading
+draft: true
 ---
 
 A running list of work I keep returning to, and the notes on this site that engage with it.
@@ -21,6 +24,4 @@ A running list of work I keep returning to, and the notes on this site that enga
 ## Foundations I revisit
 
 - Hyndman & Athanasopoulos, *Forecasting: Principles and Practice* — basis for [[posts/2022-06-03-Time-Series-Analysis-With-Python|the time series notes]].
-- Karpathy's *micrograd* lecture — basis for [[posts/micrograd-part-1|Building MicroGrad]].
 
-See the [[colophon|colophon]] for how these notes are written and published.

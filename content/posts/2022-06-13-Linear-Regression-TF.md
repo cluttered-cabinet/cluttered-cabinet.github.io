@@ -1,8 +1,13 @@
 ---
 title: Linear Regression with minibatch gradient descent in TensorFlow
 description: Because honestly why not?
-date: "2022-06-13"
-tags: [jupyter, python, tensorflow, linear-regression]
+date: 2022-06-13
+tags:
+  - jupyter
+  - python
+  - tensorflow
+  - linear-regression
+draft: true
 ---
 Alright, so this is going to be a quick, not very in depth approach to linear regression with TensorFlow. A lot of the functions I'm using for this that have to do with TensorFlow **will** be explained in a later post where I describe everything as simply as possible with examples. Bear with me here. One note is that I'm taking section 3.2 of the d2l.ai book and trying to make it simpler, so you may see code overlap, but hopefully this will be much more informative and easier to read (after some revisions).
 

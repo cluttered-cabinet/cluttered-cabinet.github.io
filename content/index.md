@@ -1,7 +1,9 @@
 ---
 title: Cluttered Cabinet
 description: Experiment logs, architecture notes, and dead-ends from Darpan Ganatra's machine learning and representation-engineering research.
+enableToc: false
 ---
+**Note**: All posts are down temporarily.
 
 A cluttered cabinet of experiment logs, architecture notes, and dead-ends. I work on machine learning, agentic systems, and representation engineering. This is where the working notes live.
 
@@ -16,9 +18,6 @@ Use the **explorer** on the left to browse everything, the **search** (or press 
 - [[posts/Differential-Equations-1|Modelling Differential Equations in Python]] — the first in an ODE-modelling series.
 - [[posts/2022-06-03-Time-Series-Analysis-With-Python|Time Series Analysis with Python]] — refreshing forecasting techniques.
 - [[posts/2022-06-13-Linear-Regression-TF|Linear Regression in TensorFlow]] — minibatch gradient descent from scratch.
-
-See the full list in the [[posts/|posts folder]].
-
 ## Elsewhere
 
 - [[about|About]] — who I am and what I'm working on.

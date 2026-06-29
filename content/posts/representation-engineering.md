@@ -1,11 +1,19 @@
 ---
 title: "Representation Engineering for Controllable Personas: LAT, DiM, and the Probe vs. SAE Debate"
-date: "2026-02-24"
-summary: "How I ended up abandoning PCA-based steering in favor of Difference-in-Means, why SAEs and linear probes are answering fundamentally different questions, and what a rigorous validation framework looks like for NeurIPS-caliber work."
-description: "A deep dive into representation engineering for controllable AI personas. Covers the evolution from LAT to DiM, linear probes vs SAEs, steering mechanics, and a publication-ready validation framework."
-tags: ["representation-engineering", "llms", "interpretability", "linear-probes", "SAEs", "steering", "DiM", "LAT"]
+date: 2026-02-24
+summary: How I ended up abandoning PCA-based steering in favor of Difference-in-Means, why SAEs and linear probes are answering fundamentally different questions, and what a rigorous validation framework looks like for NeurIPS-caliber work.
+description: A deep dive into representation engineering for controllable AI personas. Covers the evolution from LAT to DiM, linear probes vs SAEs, steering mechanics, and a publication-ready validation framework.
+tags:
+  - representation-engineering
+  - llms
+  - interpretability
+  - linear-probes
+  - SAEs
+  - steering
+  - DiM
+  - LAT
 toc: true
-draft: false
+draft: true
 ---
 
 ## The Problem

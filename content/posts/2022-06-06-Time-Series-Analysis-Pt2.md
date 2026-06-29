@@ -1,7 +1,11 @@
 ---
 title: Time Series Analysis with Python (Part 2)
-date: "2022-06-06"
-tags: [jupyter, python, timeseries]
+date: 2022-06-06
+tags:
+  - jupyter
+  - python
+  - timeseries
+draft: true
 ---
 
 Picking up from [[posts/2022-06-03-Time-Series-Analysis-With-Python|Part 1]].

@@ -1,8 +1,13 @@
 ---
 title: Modelling Differential Equations in Python
 description: The first in a series of tutorials to model ODEs and systems of ODEs in Python.
-date: "2022-05-19"
-tags: [jupyter, python, modelling, comp_bio]
+date: 2022-05-19
+tags:
+  - jupyter
+  - python
+  - modelling
+  - comp_bio
+draft: true
 ---
 # Introduction
 I've long been interested in modelling biological systems with mathematics. This is going to be a series which goes over how to do that (for simple systems of course). 
