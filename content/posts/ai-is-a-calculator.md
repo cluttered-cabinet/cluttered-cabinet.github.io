@@ -1,8 +1,8 @@
 ---
 title: AI is a calculator
 date: 2026-07-14
-summary: The problem isn't the tool. It's that the tool lowered the activation energy for putting unoriginal ideas into the world.
-description: A short note on why AI isn't to blame for the flood of low-quality output — lowering the activation energy of production is.
+summary: I don't think AI is to blame for the flood of low-quality output. Making things cheap to produce is.
+description: A short note on why the problems we blame on AI are mostly about the lowered activation energy of producing things.
 tags:
   - meta
   - ai
@@ -10,12 +10,8 @@ tags:
 draft: true
 ---
 
-A short note on something I keep coming back to.
+A thought I keep coming back to: I don't think AI is to blame for most of the issues we have with it. What actually changed is that the activation energy for producing something dropped to almost nothing, so people can put unoriginal, half-baked ideas into the ether way faster than they used to. Writing a mediocre essay or a derivative blog post used to cost you a few hours, and that cost quietly filtered out a lot of noise. Now it doesn't.
 
-I don't think AI is to blame for most of the issues we attribute to it. The real change is that people can now churn out ideas — subpar, unoriginal ideas included — much faster than before. The activation energy for producing *something* has collapsed, so bullshit that would previously have died in a drafts folder gets put into the ether at scale.
+I think of AI like a calculator. A calculator didn't make anyone better or worse at math, it just removed the friction of doing arithmetic by hand. Whether you spend the time that frees up going deeper or cranking out more of the same is up to you.
 
-That's not a property of the model. It's a property of what happens when you make production nearly free. The bottleneck used to be effort: writing a mediocre essay, a derivative blog post, or a half-baked pitch still cost you hours, and that cost filtered out a lot of noise. Remove the cost and the filter goes with it.
-
-AI is like a calculator in that way. A calculator doesn't make anyone better or worse at math — it removes the friction of arithmetic. What you do with that freed-up capacity is on you. Some people use it to go deeper; others use it to produce more of the same, faster.
-
-So when the ether fills up with low-effort output, the tool is doing exactly what tools do: amplifying whoever is holding it. The quality problem was always a people problem. AI just turned up the throughput.
+So when everything fills up with low-effort bullshit, I don't see that as a model problem. That's what people were always going to do once producing it got cheap.

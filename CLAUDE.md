@@ -4,212 +4,76 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Cluttered Cabinet 2.0** is a personal research notebook/blog built with **Astro**, a modern static site generator. The site features a minimal, academic notebook aesthetic with light/dark themes, focusing on readability, clean typography, and content-first design.
+**Cluttered Cabinet** is a personal research notebook / digital garden built with **Quartz 5** (https://quartz.jzhao.xyz/). Content is authored as Markdown in an Obsidian vault and deployed to GitHub Pages at `https://cluttered-cabinet.github.io`.
 
-**Tech Stack:**
-- **Astro** - Static site generator with content collections
-- **TailwindCSS** - Utility-first CSS framework
-- **Framer Motion** - Animation library for React components
-- **TypeScript** - Type-safe development
+See `AGENTS.md` for the full repository guidelines; the essentials are summarized here.
 
 ## Common Development Commands
 
-### Local development server
 ```bash
-npm run dev
+npm ci                      # install dependencies (Node >= 22, npm >= 10.9.2)
+npx quartz plugin install   # install Quartz plugins from quartz.lock.json (required after fresh clone)
+npx quartz build --serve    # build and serve locally at http://localhost:8080 with hot reload
+npx quartz build            # production build into public/
+npm run check               # typecheck (tsc --noEmit) and prettier --check
+npm run format              # prettier --write
 ```
-Starts the Astro dev server at `http://localhost:4321` with hot module replacement. Changes to content, components, or styles will automatically refresh the browser.
 
-### Build the site
-```bash
-npm run build
-```
-Generates the static site and outputs to `dist/`. This runs type checking and builds the production-ready site.
-
-### Preview production build
-```bash
-npm run preview
-```
-Serves the built site locally to preview the production build before deployment.
-
-### Type checking
-```bash
-npx astro check
-```
-Runs TypeScript type checking on the entire project, including Astro files.
+There is no automated test suite. Before opening a PR, run `npx quartz build` and confirm it completes without warnings about missing files or broken links.
 
 ## Project Structure
 
 ```
 /
-├── src/
-│   ├── components/         # Reusable UI components
-│   │   ├── Header.astro    # Site header with navigation
-│   │   ├── Footer.astro    # Site footer
-│   │   ├── Hero.tsx        # Animated hero section (React)
-│   │   └── PostCard.astro  # Blog post preview card
-│   ├── content/            # Content collections
-│   │   ├── config.ts       # Content collection schemas
-│   │   └── posts/          # Blog posts (Markdown)
-│   ├── layouts/
-│   │   └── Layout.astro    # Base layout wrapper
-│   ├── pages/              # File-based routing
-│   │   ├── index.astro     # Homepage with hero + featured posts
-│   │   ├── about.astro     # About page
-│   │   ├── posts.astro     # Posts list
-│   │   ├── projects.astro  # Projects showcase
-│   │   └── posts/
-│   │       └── [...slug].astro  # Dynamic post routes
-│   └── styles/
-│       └── global.css      # Global styles and Tailwind imports
-├── public/                 # Static assets (copied as-is)
-│   ├── noise.png          # Background noise texture
-│   └── favicon.svg        # Site favicon
-├── astro.config.mjs       # Astro configuration
-├── tailwind.config.mjs    # Tailwind configuration
-└── tsconfig.json          # TypeScript configuration
+├── content/                # All published content; also an Obsidian vault
+│   ├── index.md            # Home page
+│   ├── about.md            # About page
+│   ├── projects.md         # Projects page
+│   ├── posts/              # Blog posts (Markdown)
+│   ├── attachments/        # Images, embedded via wikilinks: ![[figure.png]]
+│   └── .obsidian/          # Obsidian vault config (ignored by Quartz)
+├── quartz/                 # Vendored Quartz engine — avoid editing
+├── quartz.config.yaml      # Site configuration (theme, plugins, layout)
+├── quartz.lock.json        # Plugin lockfile
+└── .github/workflows/deploy.yml  # Builds and deploys public/ to GitHub Pages on push to main
 ```
 
-## Design System
+Build output goes to `public/` (gitignored). Plugins install to `.quartz/` (gitignored).
 
-### Colors (Dark Theme - Default)
-- **Background**: `#0F0F0F` (near black)
-- **Surface**: `#1A1A1A` (card backgrounds)
-- **Accent**: `#60A5FA` (blue accent)
-- **Text Primary**: `#E8E8E8`
-- **Text Secondary**: `#A0A0A0`
-- **Border**: `#2A2A2A`
+## Writing Posts
 
-### Colors (Light Theme)
-- **Background**: `#FFFFFF` (white)
-- **Surface**: `#F9F9F9` (subtle gray)
-- **Accent**: `#2563EB` (darker blue)
-- **Text Primary**: `#1A1A1A`
-- **Text Secondary**: `#666666`
-- **Border**: `#E0E0E0`
-
-### Typography
-- **Font**: IBM Plex Mono (monospace throughout)
-- **Line Height**: 1.7 (comfortable reading)
-- **Scale**: Modest sizing focused on readability
-
-### Key Features
-- Light/dark theme toggle (top right)
-- Subtle noise texture on background
-- Table-like post listings with entry numbers
-- Minimal hover effects (opacity-based)
-- Simple fade-in animations
-- Responsive, mobile-first design
-- Collapsible code blocks in posts
-
-## Writing Blog Posts
-
-Posts are Markdown files in `src/content/posts/` with YAML frontmatter:
+Posts are Markdown files in `content/posts/` with YAML frontmatter:
 
 ```yaml
 ---
-title: "Post Title"
-date: "2024-06-26"
-summary: "Brief description shown in listings"
-description: "SEO description"
-tags: ["tag1", "tag2"]
-toc: true
-draft: false
+title: Post Title
+date: 2026-01-15
+summary: Short description shown in listings
+description: SEO / meta description
+tags:
+  - tag1
+  - tag2
+draft: true
 ---
-
-# Your content here
 ```
 
-### Frontmatter Fields
-- `title` (required) - Post title
-- `date` (required) - Publication date (YYYY-MM-DD format)
-- `summary` (optional) - Short description for post cards
-- `description` (optional) - SEO meta description
-- `tags` (optional) - Array of tags
-- `toc` (optional) - Enable table of contents
-- `draft` (optional) - Hide from production builds
+- Pages with `draft: true` are excluded from the build (the `remove-draft` plugin is enabled).
+- Use Obsidian wikilinks for internal links (`[[posts/some-post|label]]`) and image embeds (`![[figure.png]]`) so links survive file moves. Link resolution is `shortest`.
+- Obsidian callouts (`> [!info] Title`), LaTeX (`$...$`, `$$...$$` via KaTeX), tables, footnotes, and syntax highlighting all work.
+- Do not use emojis anywhere in site content, commit messages, or tooling output.
 
-## Adding Jupyter Notebooks
+## Configuration
 
-To add a Jupyter notebook as a post, convert it to markdown first:
-
-### Quick Method
-```bash
-# Install nbconvert if needed
-pip install nbconvert
-
-# Convert notebook to markdown
-jupyter nbconvert --to markdown your-notebook.ipynb --output-dir=src/content/posts
-
-# Add frontmatter to the generated markdown file (see above)
-```
-
-### Using the Conversion Script
-```bash
-python scripts/convert-notebook.py path/to/your-notebook.ipynb
-```
-
-This will:
-- Convert the notebook to markdown
-- Add a frontmatter template
-- Place it in `src/content/posts/`
-
-Then edit the generated file to update the frontmatter (title, summary, tags, etc.).
-
-See `scripts/convert-notebook.md` for more details.
+- Site config lives in `quartz.config.yaml`: page title, `baseUrl` (`cluttered-cabinet.github.io`), theme colors/fonts, and the plugin list with layout positions.
+- Fonts: Schibsted Grotesk (headers), Source Sans Pro (body), IBM Plex Mono (code).
+- Notable enabled plugins: explorer and search (left sidebar), table of contents and backlinks (right), dark mode, reader mode, breadcrumbs, RSS/sitemap (`content-index`), OG images, encrypted pages, alias redirects.
 
 ## Deployment
 
-The site is configured for **GitHub Pages** deployment:
-- **Site URL**: `https://cluttered-cabinet.github.io`
-- **Build output**: `dist/` directory
-- Build process: `npm run build` generates static HTML/CSS/JS
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which installs dependencies and plugins, runs `npx quartz build`, and publishes `public/` to GitHub Pages.
 
-GitHub Actions can automatically build and deploy on push to main. The `astro.config.mjs` file is already configured with the correct site URL.
+## Commit & PR Guidelines
 
-## Content Collections
-
-Astro content collections provide type-safe content management. The schema is defined in `src/content/config.ts`:
-
-```typescript
-const postsCollection = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    date: z.string(),
-    summary: z.string().optional(),
-    // ... more fields
-  }),
-});
-```
-
-This ensures all posts have valid frontmatter and provides TypeScript autocomplete.
-
-## Customization
-
-### Adding New Pages
-Create `.astro` files in `src/pages/`. The file path determines the URL:
-- `src/pages/contact.astro` → `/contact`
-- `src/pages/blog/archive.astro` → `/blog/archive`
-
-### Modifying Styles
-- **Global styles**: Edit `src/styles/global.css`
-- **Tailwind config**: Edit `tailwind.config.mjs` to add custom colors, fonts, etc.
-- **Component styles**: Use scoped `<style>` tags in `.astro` components or Tailwind classes
-
-### Animation Variants
-Framer Motion variants are defined in React components (e.g., `Hero.tsx`):
-```typescript
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
-};
-```
-
-## Tips
-
-1. **Draft posts**: Set `draft: true` in frontmatter to hide posts from production
-2. **Hot reload**: Astro dev server automatically refreshes on file changes
-3. **Type safety**: Use `npx astro check` to catch type errors before building
-4. **Image optimization**: Place images in `public/` or use Astro's `<Image />` component for optimization
-5. **Component islands**: Use `client:load` directive to hydrate React components (like Hero)
+- Concise, imperative commit subjects (`Add new post`, `Fix broken image link`).
+- Never commit `public/` or `.quartz/`.
+- PRs should summarize intent and note the testing performed.
