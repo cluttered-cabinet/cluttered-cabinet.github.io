@@ -200,7 +200,18 @@ plugins:
         GitHub: https://github.com/cluttered-cabinet
         LinkedIn: https://www.linkedin.com/in/darpanganatra/
   - source: github:quartz-community/recent-notes
-    enabled: false
+    enabled: true
+    options:
+      title: Latest writing
+      limit: 5
+      linkToMore: posts/
+      showTags: false
+      hideTagPages: true
+      hideFolderPages: true
+    layout:
+      position: afterBody
+      priority: 10
+      condition: index-only
   - source: github:quartz-community/spacer
     enabled: true
     options: {}
