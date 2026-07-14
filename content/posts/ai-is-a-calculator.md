@@ -7,7 +7,7 @@ tags:
   - meta
   - ai
   - thoughts
-draft: true
+draft: false
 ---
 
 A thought I keep coming back to: I don't think AI is to blame for most of the issues we have with it. What actually changed is that the activation energy for producing something dropped to almost nothing, so people can put unoriginal, half-baked ideas into the ether way faster than they used to. Writing a mediocre essay or a derivative blog post used to cost you a few hours, and that cost quietly filtered out a lot of noise. Now it doesn't.
